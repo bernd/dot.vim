@@ -20,7 +20,7 @@ set nowrap
 set number
 set ruler
 set nofoldenable
-set cursorline
+"set cursorline
 
 " Searching behavior
 set ignorecase
