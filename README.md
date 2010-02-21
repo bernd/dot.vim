@@ -40,5 +40,5 @@ Lots of color schemes can be found in the
 
 ## Links
 
-http://www.adamlowe.me/2009/12/vim-destroys-all-other-rails-editors.html
-http://www.zalas.eu/how-to-use-textmate-like-snippets-in-vim
+* http://www.adamlowe.me/2009/12/vim-destroys-all-other-rails-editors.html
+* http://www.zalas.eu/how-to-use-textmate-like-snippets-in-vim
