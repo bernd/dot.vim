@@ -1,8 +1,8 @@
 " Vim color file
 " Maintainer:   Bernd Ahlers <bernd@tuneafish.de>
-" Last Change:  February 11 2010
+" Last Change:  February 21 2010
 "
-" bernd.vim - a modified version of Wombat256.
+" tuneafish.vim - a modified version of Wombat256.
 
 set background=dark
 
