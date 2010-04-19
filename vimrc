@@ -64,7 +64,7 @@ au FileType haml set ts=2 sw=2 expandtab list
 au FileType css set expandtab list
 au FileType cucumber set ts=2 sw=2 expandtab list
 au FileType markdown set ai formatoptions=tcroqn2 comments=n:> expandtab list
-au FileType sh set nolist
+au FileType sh set nolist noexpandtab
 
 " F8 sets encoding to utf-8
 map <F8> <esc>:set encoding=utf-8<cr>
