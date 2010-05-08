@@ -67,6 +67,12 @@ au FileType cucumber set ts=2 sw=2 expandtab list
 au FileType markdown set ai formatoptions=tcroqn2 comments=n:> expandtab list
 au FileType sh set nolist noexpandtab
 
+" F2 enables paste mode.
+" http://vim.wikia.com/wiki/Toggle_auto-indenting_for_code_paste
+nnoremap <F2> :set invpaste paste?<CR>
+set pastetoggle=<F2>
+set showmode
+
 " F8 sets encoding to utf-8
 map <F8> <esc>:set encoding=utf-8<cr>
 
