@@ -55,6 +55,7 @@ au BufRead,BufNewFile *.erb set filetype=eruby
 au BufRead,BufNewFile *.thor set filetype=ruby
 au BufRead,BufNewFile Gemfile set filetype=ruby
 au BufRead,BufNewFile *.rb set filetype=ruby.rspec
+au BufRead,BufNewFile *.ru set filetype=ruby
 au BufRead,BufNewFile *.sub set filetype=sh
 
 au FileType python set ts=4 sw=4 tw=100 sts=4 expandtab list
