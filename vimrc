@@ -54,6 +54,7 @@ au BufRead,BufNewFile *.feature,*.story set filetype=cucumber
 au BufRead,BufNewFile *.erb set filetype=eruby
 au BufRead,BufNewFile *.thor set filetype=ruby
 au BufRead,BufNewFile Gemfile set filetype=ruby
+au BufRead,BufNewFile Capfile set filetype=ruby
 au BufRead,BufNewFile *.rb set filetype=ruby.rspec
 au BufRead,BufNewFile *.ru set filetype=ruby
 au BufRead,BufNewFile *.sub set filetype=sh
