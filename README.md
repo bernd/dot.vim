@@ -6,11 +6,12 @@
 
 Global Plugin to comment and un-comment lines in different source files in
 both normal and visual <Shift-V> mode
+
 Usage:
-ctrl-c  to comment a single line
-ctrl-x  to un-comment a single line
-shift-v and select multiple lines, then ctrl-c to comment the selected multiple lines
-shift-v and select multiple lines, then ctrl-x to un-comment the selected multiple lines
+* `ctrl-c` to comment a single line
+* `ctrl-x` to un-comment a single line
+* `shift-v` and select multiple lines, then ctrl-c to comment the selected multiple lines
+* `shift-v` and select multiple lines, then ctrl-x to un-comment the selected multiple lines
 
 
 ## Installed plugins
