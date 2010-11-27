@@ -47,9 +47,6 @@ if (&termencoding == "utf-8")
 endif
 
 au BufRead,BufNewFile *.pp set filetype=puppet
-au BufRead,BufNewFile *.haml set filetype=haml
-au BufRead,BufNewFile *.sass set filetype=sass
-au BufRead,BufNewFile *.scss set filetype=scss
 au BufRead,BufNewFile *.feature,*.story set filetype=cucumber
 au BufRead,BufNewFile *.erb set filetype=eruby
 au BufRead,BufNewFile *.thor set filetype=ruby

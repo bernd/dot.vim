@@ -1,24 +1,20 @@
 " Vim syntax file
-" Language: SCSS (Sassy CSS)
-" Author: Daniel Hofstetter (daniel.hofstetter@42dh.com)
-" Inspired by Tim Pope's sass syntax file
+" Language:	SCSS
+" Maintainer:	Tim Pope <vimNOSPAM@tpope.org>
+" Filenames:	*.scss
+" Last Change:	2010 Jul 26
 
 if exists("b:current_syntax")
   finish
 endif
 
-runtime! syntax/css.vim
+runtime! syntax/sass.vim
 
-syn match scssVariable "$[[:alnum:]_-]\+"
-syn match scssMixin "^@mixin.*"
-syn match scssMixing "@include.*"
+syn match scssComment "//.*" contains=sassTodo,@Spell
+syn region scssComment start="/\*" end="\*/" contains=sassTodo,@Spell
 
-syn region scssComment	start="^\z(\s*\)//" end="^\%(\z1 \)\@!"
-
-hi def link scssVariable  Identifier
-hi def link scssMixin	  PreProc
-hi def link scssMixing	  PreProc
-hi def link scssComment	  Comment
+hi def link scssComment sassComment
 
 let b:current_syntax = "scss"
 
+" vim:set sw=2:
