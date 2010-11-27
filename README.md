@@ -19,17 +19,19 @@ shift-v and select multiple lines, then ctrl-x to un-comment the selected multip
 * [vim-haml](http://github.com/tpope/vim-haml)
 * [vim-endwise](http://github.com/tpope/vim-endwise)
 * [vim-surround](http://github.com/tpope/vim-surround)
+* [vim-ruby](http://github.com/vim-ruby/vim-ruby)
 * [NERD_tree](http://github.com/scrooloose/nerdtree)
 * [ScrollColor](http://www.vim.org/scripts/script.php?script_id=1488)
 * [AutoClose](http://www.vim.org/scripts/script.php?script_id=2009)
 * [bufexplorer](http://www.vim.org/scripts/script.php?script_id=42)
 * [comments](http://www.vim.org/scripts/script.php?script_id=1528)
-* [snipMate](http://www.vim.org/scripts/script.php?script_id=2540)
+* [snipMate](http://github.com/msanders/snipmate.vim)
 
 
 ## Syntax files
 
 * [Markdown](http://www.vim.org/scripts/script.php?script_id=1242)
+* [Puppet](https://github.com/puppetlabs/puppet/tree/master/ext/vim/)
 
 
 ## Color schemes
