@@ -49,6 +49,7 @@ endif
 au BufRead,BufNewFile *.pp set filetype=puppet
 au BufRead,BufNewFile *.rb set filetype=ruby.rspec
 au BufRead,BufNewFile *.sub set filetype=sh
+au BufRead,BufNewFile *.js set filetype=javascript.node
 
 au FileType python set ts=4 sw=4 tw=100 sts=4 expandtab list
 au FileType ruby set ts=2 sw=2 tw=100 sts=2 expandtab list
