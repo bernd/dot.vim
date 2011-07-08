@@ -25,9 +25,12 @@ set scrolloff=3
 set wildmenu
 set wildmode=list:longest
 set laststatus=2
-set colorcolumn=80
 
-hi ColorColumn ctermbg=235
+" This only works since vim 7.3
+if version >= 703
+  set colorcolumn=80
+  hi ColorColumn ctermbg=235
+endif
 
 " Searching behavior
 set ignorecase
