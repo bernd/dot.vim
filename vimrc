@@ -21,6 +21,13 @@ set number
 set ruler
 set nofoldenable
 "set cursorline
+set scrolloff=3
+set wildmenu
+set wildmode=list:longest
+set laststatus=2
+set colorcolumn=80
+
+hi ColorColumn ctermbg=235
 
 " Searching behavior
 set ignorecase
@@ -32,6 +39,9 @@ set autoindent
 set smartindent
 set ts=8
 set sw=8
+
+" Set leader key
+let mapleader=","
 
 " Filetypes
 filetype on
@@ -54,7 +64,7 @@ au BufRead,BufNewFile *.js set filetype=javascript.node
 au FileType python set ts=4 sw=4 tw=100 sts=4 expandtab list
 au FileType ruby set ts=2 sw=2 tw=100 sts=2 expandtab list
 au FileType javascript set ts=2 sw=2 tw=100 sts=2 expandtab list
-au FileType html set ts=2 sw=2 tw=100 sts=2 expandtab list
+au FileType html set ts=2 sw=2 tw=100 sts=2 expandtab list nosmartindent
 au FileType eruby set ts=2 sw=2 expandtab list
 au FileType haml set ts=2 sw=2 expandtab list
 au FileType css set expandtab list
