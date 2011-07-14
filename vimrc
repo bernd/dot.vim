@@ -55,7 +55,7 @@ filetype indent on
 set listchars=trail:.,extends:>,tab:>-
 set nolist
 
-if (&termencoding == "utf-8")
+if &termencoding == "utf-8"
   set encoding=utf-8
 endif
 
