@@ -26,10 +26,15 @@ set wildmenu
 set wildmode=list:longest
 set laststatus=2
 
+set backspace=indent,eol,start
+
 " This only works since vim 7.3
 if version >= 703
   set colorcolumn=80
   hi ColorColumn ctermbg=235
+
+  " Encryption
+  set cryptmethod=blowfish
 endif
 
 " Searching behavior
