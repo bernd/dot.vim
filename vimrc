@@ -1,4 +1,6 @@
 " My vimrc. Based on a config kindly provided by auxesis.
+" Some more inspiration from:
+" http://stevelosh.com/blog/2010/09/coming-home-to-vim/
 
 set directory=~/.vim/tmp
 set viminfo='100,f1
