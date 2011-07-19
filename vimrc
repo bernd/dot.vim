@@ -91,6 +91,7 @@ set showmode
 " F5 to remove trailing whitespace.
 " http://vim.wikia.com/wiki/Remove_unwanted_spaces
 :nnoremap <silent> <F5> :let _s=@/<Bar>:%s/\s\+$//e<Bar>:let @/=_s<Bar>:nohl<CR>
+nnoremap <leader>w :%s/\s\+$//<cr>:let @/=''<CR>
 
 " F8 sets encoding to utf-8
 map <F8> <esc>:set encoding=utf-8<cr>
