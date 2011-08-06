@@ -93,6 +93,9 @@ set showmode
 :nnoremap <silent> <F5> :let _s=@/<Bar>:%s/\s\+$//e<Bar>:let @/=_s<Bar>:nohl<CR>
 nnoremap <leader>w :%s/\s\+$//<cr>:let @/=''<CR>
 
+" F6 replace all ^M
+map <F6> <esc>:%s,\r,,g<cr>
+
 " F8 sets encoding to utf-8
 map <F8> <esc>:set encoding=utf-8<cr>
 
