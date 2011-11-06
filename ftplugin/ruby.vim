@@ -68,6 +68,9 @@ endif
 setlocal comments=:#
 setlocal commentstring=#\ %s
 
+" Avoid calling ruby which increases vim startup.
+let s:ruby_path = ".,,"
+
 if !exists("s:ruby_path")
   if exists("g:ruby_path")
     let s:ruby_path = g:ruby_path
