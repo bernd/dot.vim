@@ -30,3 +30,6 @@ au BufNewFile,BufRead *.erb,*.rhtml			set filetype=eruby
 
 " Thor
 au BufNewFile,BufRead [tT]horfile,*.thor		set filetype=ruby
+
+" Guard
+au BufNewFile,BufRead Guardfile				set filetype=ruby
