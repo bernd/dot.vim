@@ -28,7 +28,7 @@ Usage:
 * [bufexplorer](http://www.vim.org/scripts/script.php?script_id=42)
 * [comments](http://www.vim.org/scripts/script.php?script_id=1528)
 * [snipMate](http://github.com/msanders/snipmate.vim)
-
+* ...
 
 ## Syntax files
 
