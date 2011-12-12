@@ -32,7 +32,7 @@ set backspace=indent,eol,start
 
 " This only works since vim 7.3
 if version >= 703
-  set colorcolumn=80
+  set colorcolumn=81
   hi ColorColumn ctermbg=235
 
   " Encryption
