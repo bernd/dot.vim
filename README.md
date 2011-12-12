@@ -17,12 +17,12 @@ Usage:
 
 ## Installed plugins
 
+* [ctrlp.vim](https://github.com/kien/ctrlp.vim)
 * [vim-cucumber](http://github.com/tpope/vim-cucumber)
 * [vim-haml](http://github.com/tpope/vim-haml)
 * [vim-endwise](http://github.com/tpope/vim-endwise)
 * [vim-surround](http://github.com/tpope/vim-surround)
 * [vim-ruby](http://github.com/vim-ruby/vim-ruby)
-* [NERD_tree](http://github.com/scrooloose/nerdtree)
 * [ScrollColor](http://www.vim.org/scripts/script.php?script_id=1488)
 * [AutoClose](http://www.vim.org/scripts/script.php?script_id=2009)
 * [bufexplorer](http://www.vim.org/scripts/script.php?script_id=42)
