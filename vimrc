@@ -99,9 +99,6 @@ map <F6> <esc>:%s,\r,,g<cr>
 " F8 sets encoding to utf-8
 map <F8> <esc>:set encoding=utf-8<cr>
 
-" F9 opens the NERDTree
-map <F9> <esc>:NERDTree<cr>
-
 " CTRL+b opens the buffer list
 map <C-b> <esc>:BufExplorer<cr>
 
