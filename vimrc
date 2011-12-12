@@ -93,6 +93,12 @@ set showmode
 :nnoremap <silent> <F5> :let _s=@/<Bar>:%s/\s\+$//e<Bar>:let @/=_s<Bar>:nohl<CR>
 nnoremap <leader>w :%s/\s\+$//<cr>:let @/=''<CR>
 
+" Easier navigation for split windows
+nnoremap <c-j> <c-w>j
+nnoremap <c-k> <c-w>k
+nnoremap <c-h> <c-w>h
+nnoremap <c-l> <c-w>l
+
 " F6 replace all ^M
 map <F6> <esc>:%s,\r,,g<cr>
 
