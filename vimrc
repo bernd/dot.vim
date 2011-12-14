@@ -23,7 +23,7 @@ set number
 set ruler
 set nofoldenable
 "set cursorline
-set scrolloff=3
+set scrolloff=5
 set wildmenu
 set wildmode=list:longest
 set laststatus=2
