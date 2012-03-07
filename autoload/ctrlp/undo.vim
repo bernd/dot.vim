@@ -13,7 +13,7 @@
 
 " Init {{{1
 if ( exists('g:loaded_ctrlp_undo') && g:loaded_ctrlp_undo )
-	\ || !( v:version > 702 && has('patch005') )
+	\ || !( v:version > 703 || ( v:version == 703 && has('patch005') ) )
 	fini
 en
 let g:loaded_ctrlp_undo = 1
@@ -80,12 +80,14 @@ fu! s:humantime(nr)
 endf
 
 fu! s:syntax()
+	for [ke, va] in items({'T': 'Directory', 'Br': 'Comment', 'Nr': 'String'})
+		if !hlexists('CtrlPUndo'.ke)
+			exe 'hi link CtrlPUndo'.ke va
+		en
+	endfo
 	sy match CtrlPUndoT '\d\+ \zs[^ ]\+\ze'
 	sy match CtrlPUndoBr '\[\|\]'
 	sy match CtrlPUndoNr '\[\d\+\]$' contains=CtrlPUndoBr
-	hi link CtrlPUndoT Directory
-	hi link CtrlPUndoBr Comment
-	hi link CtrlPUndoNr String
 endf
 
 fu! s:dict2list(dict)
@@ -100,7 +102,9 @@ endf
 fu! ctrlp#undo#init(undo)
 	let entries = a:undo['entries']
 	if empty(entries) | retu [] | en
-	cal s:syntax()
+	if has('syntax') && exists('g:syntax_on')
+		cal s:syntax()
+	en
 	let g:ctrlp_nolimit = 1
 	let entries = sort(s:dict2list(s:flatten(entries)), 's:compval')
 	retu map(entries, 'v:val[1]." [".v:val[0]."]"')
