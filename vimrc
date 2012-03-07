@@ -81,6 +81,7 @@ au FileType css set expandtab list
 au FileType cucumber set ts=2 sw=2 expandtab list
 au FileType markdown set ai formatoptions=tcroqn2 comments=n:> list
 au FileType sh set nolist noexpandtab
+au FileType puppet set ts=2 sw=2 tw=100 sts=2 expandtab list
 
 " F2 enables paste mode.
 " http://vim.wikia.com/wiki/Toggle_auto-indenting_for_code_paste
