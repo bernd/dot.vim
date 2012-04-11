@@ -28,6 +28,11 @@ set wildmenu
 set wildmode=list:longest
 set laststatus=2
 
+" Powerline plugin
+let g:Powerline_symbols = 'unicode'
+" Remove mode indicator
+call Pl#Theme#RemoveSegment('mode_indicator')
+
 set backspace=indent,eol,start
 
 " This only works since vim 7.3
