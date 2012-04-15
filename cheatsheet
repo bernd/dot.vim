@@ -1,0 +1,24 @@
+# vim-surround
+
+csW] => 'foo' -> ['foo']
+csW[ => 'foo' -> [ 'foo' ]
+
+# Editing:
+C   => delete to EOL + insert mode
+cc  => change line
+ciX => change inner
+       w: cursor
+       ": quoted string
+       (: parented string
+n G => goto line n
+
+Folding:
+zo => open fold (right arrow)
+zc => close fold
+za => toggle fold
+zm => close all folds one level (more)
+zr => open all folds one level (reduce)
+
+Completion:
+CTRL-p        => complete word
+CTRL-x CTRL-l => complete whole line, e.g. for require statements
