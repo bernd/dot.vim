@@ -144,6 +144,12 @@ nnoremap <leader>w mz:%s/\s\+$//<cr>:let @/=''<cr>`z
 " Highlight VCS conflict marker
 match ErrorMsg '^\(<\|=\|>\)\{7\}\([^=].\+\)\?$'
 
+" Custom smartinput rules.
+" Do not close a '[' if there is a ", ' or number after the cursor.
+call smartinput#define_rule({'at': '\%#\_["''0-9]', 'char': '[', 'input': '['})
+" Do not close a '{' if there is a ", ' or number after the cursor.
+call smartinput#define_rule({'at': '\%#\_["''0-9]', 'char': '{', 'input': '{'})
+
 " Align blocks on first '=' (from tenderlove)
 " Usage: ctrl-v + <leader>a
 command! -nargs=? -range Align <line1>,<line2>call AlignSection('<args>')
