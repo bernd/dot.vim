@@ -10,6 +10,15 @@ ctrl-x          => un-comment single line
 shift-v, ctrl-c => comment selected lines
 shift-v, ctrl-x => un-comment selected lines
 
+# plugin:ctrlp
+
+ctrl-p => Exec CtrlP
+
+<cr>   => Open selected file in active window
+ctrl-t => Open selected file in new tab
+ctrl-v => Open selected file in vertical split
+ctrl-<cr> => Open selected file in horizontal split (also ctrl-s, ctrl-x)
+
 # Editing:
 C   => delete to EOL + insert mode
 cc  => change line
