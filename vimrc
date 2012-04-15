@@ -94,11 +94,6 @@ nnoremap <F2> :set invpaste paste?<CR>
 set pastetoggle=<F2>
 set showmode
 
-" F5 to remove trailing whitespace.
-" http://vim.wikia.com/wiki/Remove_unwanted_spaces
-:nnoremap <silent> <F5> :let _s=@/<Bar>:%s/\s\+$//e<Bar>:let @/=_s<Bar>:nohl<CR>
-nnoremap <leader>w :%s/\s\+$//<cr>:let @/=''<CR>
-
 " Easier navigation for split windows
 nnoremap <c-j> <c-w>j
 nnoremap <c-k> <c-w>k
@@ -144,4 +139,4 @@ autocmd InsertLeave * match TrailingWhitespace /\s\+$/
 autocmd BufWinLeave * call clearmatches()
 
 " Map <leader>w to manually removing whitespace
-nnoremap <leader>w mz:%s/\s\+$//<cr>:let @/=''<cr>`z`
+nnoremap <leader>w mz:%s/\s\+$//<cr>:let @/=''<cr>`z
