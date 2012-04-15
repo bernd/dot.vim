@@ -1,6 +1,6 @@
 *smartinput.txt*	Provide smart input assistant
 
-Version 0.0.2
+Version 0.0.5
 Script ID: ****
 Copyright (C) 2012 Kana Natsuno <http://whileimautomaton.net/>
 License: So-called MIT/X license  {{{
@@ -149,7 +149,7 @@ smartinput#map_to_trigger({mode}, {lhs}, {rhs-char}, {rhs-fallback})
 			{lhs} is mapped in Insert mode if {mode} is 'i'.
 			{lhs} is mapped in Command-line mode if {mode} is 'c'.
 
-			See also |smartinput-exampels| for the details.
+			See also |smartinput-customization| for the details.
 
 smartinput#map_trigger_keys([{overridep}])     *smartinput#map_trigger_keys()*
 			Map keys to trigger smart input assistant according to
@@ -189,7 +189,7 @@ a |Dictionary| which contains the following items:
 "at" (string) (required)
 	Specifies the context to use the smart input assistant.
 	This value is treated as a |regular-expression|.
-	The smart input assistant will be used if the regular exprssion
+	The smart input assistant will be used if the regular expression
 	matches to the cursor position.
 
 	Tips: You can use |/\%#| to indicate the cursor position.
@@ -202,11 +202,13 @@ a |Dictionary| which contains the following items:
 
 "char" (string) (required)
 	Specifies a character to trigger the smart input assistant.
+	See also |smartinput-special-keys|.
 
 "input" (string) (required)
 	Specifies a result of the smart input assistant.
 	This value is used like {rhs} for |:map| commands.
 	This value is inputted instead of the "char" value.
+	See also |smartinput-special-keys|.
 
 "mode" (string) (optional)
 	Specifies the context to use the smart input assistant.
@@ -219,8 +221,8 @@ a |Dictionary| which contains the following items:
 	i		Insert mode
 	:		Command-line mode for normal Ex commands
 	>		Command-line mode for |debug-mode| commands
-	/		Command-line mode for serching with |/|
-	?		Command-line mode for serching with |?|
+	/		Command-line mode for searching with |/|
+	?		Command-line mode for searching with |?|
 	@		Command-line mode for |input()|
 	-		Command-line mode for |:insert| or |:append|
 
@@ -249,6 +251,8 @@ a |Dictionary| which contains the following items:
 	- The cursor position is highlighted as one of this value.
 
 	See also |group-name| for examples of available values.
+	See also |smartinput-check-syntax-highlighting|.
+
 	Note that only "wide" syntax items are effective.  In other words,
 	syntax items which is linked to another is not effective, and they
 	will never be matched.  For example:
@@ -258,6 +262,21 @@ a |Dictionary| which contains the following items:
 	* "lispString" is not effective because it is linked to "String".
 
 	This specification works only for Insert mode.
+
+						*smartinput-special-keys*
+Values of "char" and "input" are internally passed to |:map| commands.  So
+that:
+
+- Special keys must be written like '<Left>', not "\<Left>".
+- "|" must be written '<Bar>'.
+- "\" must be written '<Bslash>'.
+
+					*smartinput-check-syntax-highlighting*
+To investigate how the character under the cursor is highlighted, use the
+following command:
+>
+  echo map(synstack(line('.'),col('.')),'synIDattr(synIDtrans(v:val),"name")')
+<
 
 
 ------------------------------------------------------------------------------
@@ -377,36 +396,105 @@ This convention is to avoid rule duplication.  See also the following table:
 ==============================================================================
 CUSTOMIZATION					*smartinput-customization*
 
+						*smartinput-customization-a*
 (A) To define your own |smartinput-rules| for the smart input assistant,
     use |smartinput#define_rule()|.  See also |smartinput-default-rules| for
     the real world examples.
 
+						*smartinput-customization-b*
 (B) If you define your own |smartinput-rules| which "char" values are
     different from ones of |smartinput-default-rules|, you have to define
     trigger keys for your own rules with |smartinput#map_to_trigger()| or
     |smartinput#map_trigger_keys()|.
 
+						*smartinput-customization-c*
+(C) Example #1: If you often write Ruby script and you want to insert "#{}"
+    by typing "#" in a string literal to input string interpolation easily,
+    add the following lines into your |vimrc|:
+>
+    call smartinput#map_to_trigger('i', '#', '#', '#')
+    call smartinput#define_rule({
+    \   'at': '\%#',
+    \   'char': '#',
+    \   'input': '#{}<Left>',
+    \   'filetype': ['ruby'],
+    \   'syntax': ['Constant', 'Special'],
+    \ })
+<
+						*smartinput-customization-d*
+(D) Example #2: If you often write Ruby script and you want to insert "||"
+    by typing "|" to declare block-local variable easily,
+    add the following lines into your |vimrc|:
+>
+    call smartinput#map_to_trigger('i', '<Bar>', '<Bar>', '<Bar>')
+    call smartinput#define_rule({
+    \   'at': '\%#',
+    \   'char': '<Bar>',
+    \   'input': '<Bar><Bar><Left>',
+    \   'filetype': ['ruby'],
+    \ })
+<
+    But the above rule is not so useful, because "||" is always inserted and
+    the cursor is moved into the bars, even if you want to write the following
+    idiom: "foo ||= bar".  So that it's better to tweak the "at" value to
+    activate the rule if and only if the cursor is just after "{" or "do":
+>
+    call smartinput#define_rule({
+    \   'at': '\({\|\<do\>\)\s*\%#',
+    \   'char': '<Bar>',
+    \   'input': '<Bar><Bar><Left>',
+    \   'filetype': ['ruby'],
+    \ })
+<
 
 
 
 ==============================================================================
 BUGS						*smartinput-bugs*
 
-- Still this plugin is not mature, there might be problematic behaivor and
+- Still this plugin is not mature, there might be problematic behavior and
   missing features.  If you find any problem or have any suggestion, please
   give your feedback to the author via:
   https://github.com/kana/vim-smartinput/issues
 
+				   *smartinput-disable-completion-temporarily*
 - Though there are many default rules to support user input naturally, the
   smart input assistant is not perfect.  It sometimes completes quotes etc
   where such completion is not necessary.  In that case, use |i_CTRL-V| to
   input a character solely.  For example, type "<C-v>(" to input only "(".
+
+					    *smartinput-backspace-requirement*
+- Several rules require that 'backspace' is set to "indent,eol,start" or 2.
 
 
 
 
 ==============================================================================
 CHANGELOG					*smartinput-changelog*
+
+0.0.5	2012-04-11T21:48:41+09:00		*smartinput-changelog-0.0.5*
+	- Fix rules to leave from a (), [], or {} block.  They did not work
+	  properly with Visual-block Insert (|v_b_I|), etc.  Thanks to Dennis
+	  Sjögren for reporting the problem.
+	- Fix rules to expand a () or {} block.  After expanding a block,
+	  <Esc> had to be typed twice to return to Normal mode.  Thanks to
+	  Jonas Haag for reporting the problem.
+
+0.0.4	2012-04-07T16:26:23+09:00		*smartinput-changelog-0.0.4*
+	- Add rules for Clojure.  Thanks to Bodaniel Jeanes for the feedback.
+	- Add rules for Python-specific string literals such as r'...'.
+	  Thanks to Adrian Sampson for the initial rules and the ideas.
+	- Add examples to write custom rules.
+	  See |smartinput-customization-c| and |smartinput-customization-d|
+	  for the details.  Thanks to Guillaume for the feedback.
+
+0.0.3	2012-04-04T21:33:34+09:00		*smartinput-changelog-0.0.3*
+	- Revise rules for expanding {} and () blocks to indent correctly for
+	  some 'filetype's, especially for PHP.  Thanks to Jon Duell for the
+	  feedback on this problem.
+	- Add a note on how to disable completion temporarily.
+	  See |smartinput-disable-completion-temporarily| for the details.
+	- Add a note on 'backspace'.  See |smartinput-backspace-requirement|.
 
 0.0.2	2012-04-01T16:11:14+09:00		*smartinput-changelog-0.0.2*
 	- Revise the default rules to easily leave from multiline {}, [] and
@@ -415,7 +503,7 @@ CHANGELOG					*smartinput-changelog*
 	  block.  The former is used by default, and the latter is used only
 	  for specific languages which \ doesn't have special meanings in ''
 	  blocks, for example, Perl, Ruby, shell script and Vim script.
-	  Thansk to Andrew Ray for the suggestion.
+	  Thanks to Andrew Ray for the suggestion.
 
 0.0.1	2012-03-30T19:38:53+09:00		*smartinput-changelog-0.0.1*
 	- Fix side effects in the default configuration.  <C-h> in

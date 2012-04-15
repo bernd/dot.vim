@@ -1,5 +1,5 @@
 " smartinput - Provide smart input assistant
-" Version: 0.0.2
+" Version: 0.0.5
 " Copyright (C) 2012 Kana Natsuno <http://whileimautomaton.net/>
 " License: So-called MIT/X license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
@@ -73,26 +73,26 @@ function! smartinput#define_default_rules()  "{{{2
   endfunction
   call urules.add('()', [
   \   {'at': '\%#', 'char': '(', 'input': '()<Left>'},
-  \   {'at': '\%#\_s*)', 'char': ')', 'input': '<Char-0x1C><C-o>:call search('')'', ''cW'')<Enter><Right>'},
+  \   {'at': '\%#\_s*)', 'char': ')', 'input': '<C-r>=smartinput#_leave_block('')'')<Enter><Right>'},
   \   {'at': '(\%#)', 'char': '<BS>', 'input': '<BS><Del>'},
   \   {'at': '()\%#', 'char': '<BS>', 'input': '<BS><BS>'},
   \   {'at': '\\\%#', 'char': '(', 'input': '('},
-  \   {'at': '(\%#)', 'char': '<Enter>', 'input': '<Enter><Enter><Up><C-o>S'},
+  \   {'at': '(\%#)', 'char': '<Enter>', 'input': '<Enter><Enter><Up><Esc>S'},
   \ ])
   call urules.add('[]', [
   \   {'at': '\%#', 'char': '[', 'input': '[]<Left>'},
-  \   {'at': '\%#\_s*\]', 'char': ']', 'input': '<Char-0x1C><C-o>:call search('']'', ''cW'')<Enter><Right>'},
+  \   {'at': '\%#\_s*\]', 'char': ']', 'input': '<C-r>=smartinput#_leave_block('']'')<Enter><Right>'},
   \   {'at': '\[\%#\]', 'char': '<BS>', 'input': '<BS><Del>'},
   \   {'at': '\[\]\%#', 'char': '<BS>', 'input': '<BS><BS>'},
   \   {'at': '\\\%#', 'char': '[', 'input': '['},
   \ ])
   call urules.add('{}', [
   \   {'at': '\%#', 'char': '{', 'input': '{}<Left>'},
-  \   {'at': '\%#\_s*}', 'char': '}', 'input': '<Char-0x1C><C-o>:call search(''}'', ''cW'')<Enter><Right>'},
+  \   {'at': '\%#\_s*}', 'char': '}', 'input': '<C-r>=smartinput#_leave_block(''}'')<Enter><Right>'},
   \   {'at': '{\%#}', 'char': '<BS>', 'input': '<BS><Del>'},
   \   {'at': '{}\%#', 'char': '<BS>', 'input': '<BS><BS>'},
   \   {'at': '\\\%#', 'char': '{', 'input': '{'},
-  \   {'at': '{\%#}', 'char': '<Enter>', 'input': '<Enter><Enter><Up><C-o>S'},
+  \   {'at': '{\%#}', 'char': '<Enter>', 'input': '<Enter><Enter><Up><Esc>S'},
   \ ])
   call urules.add('''''', [
   \   {'at': '\%#', 'char': '''', 'input': '''''<Left>'},
@@ -148,6 +148,15 @@ function! smartinput#define_default_rules()  "{{{2
   \   {'at': '\%#', 'char': '''', 'input': '''''<Left>',
   \    'syntax': ['Constant']},
   \ ])
+  " Unfortunately, the space beyond the end of a comment line is not
+  " highlighted as 'Comment'.  So that it is necessary to define one more rule
+  " to cover the edge case with only 'at'.
+  call urules.add('Python string', [
+  \   {'at': '\v\c<([bu]|[bu]?r)>%#', 'char': '''', 'input': '''''<Left>'},
+  \   {'at': '\v\c<([bu]|[bu]?r)>%#', 'char': '''', 'input': '''',
+  \    'syntax': ['Comment', 'Constant']},
+  \   {'at': '\v\c\#.*<([bu]|[bu]?r)>%#$', 'char': '''', 'input': ''''},
+  \ ])
   call urules.add('Vim script comment', [
   \   {'at': '^\s*\%#', 'char': '"', 'input': '"'},
   \ ])
@@ -167,6 +176,9 @@ function! smartinput#define_default_rules()  "{{{2
   \     urules.table['```'],
   \     urules.table['English'],
   \   ],
+  \   'clojure': [
+  \     urules.table['Lisp quote'],
+  \   ],
   \   'csh': [
   \     urules.table[''''' as strong quote'],
   \   ],
@@ -175,6 +187,9 @@ function! smartinput#define_default_rules()  "{{{2
   \   ],
   \   'perl': [
   \     urules.table[''''' as strong quote'],
+  \   ],
+  \   'python': [
+  \     urules.table['Python string'],
   \   ],
   \   'ruby': [
   \     urules.table[''''' as strong quote'],
@@ -241,6 +256,16 @@ endfunction
 function! s:_operator_pattern_from(operator_name)
   let k = a:operator_name
   return k
+endfunction
+
+function! smartinput#_leave_block(end_char)
+  " NB: Originally <C-o> was used to execute search(), but <C-o> in
+  " Visual-block Insert acts as if <Esc>a, so visually selected lines will be
+  " updated and the current mode will be shifted to Insert mode.  It means
+  " that there is no timing to execute a Normal mode command.  Therefore we
+  " have to use <C-r>= instead.
+  call search(a:end_char, 'cW')
+  return ''
 endfunction
 
 
