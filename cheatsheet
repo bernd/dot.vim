@@ -1,7 +1,14 @@
-# vim-surround
+# plugin:vim-surround
 
 csW] => 'foo' -> ['foo']
 csW[ => 'foo' -> [ 'foo' ]
+
+# plugin:comments
+
+ctrl-c          => comment single line
+ctrl-x          => un-comment single line
+shift-v, ctrl-c => comment selected lines
+shift-v, ctrl-x => un-comment selected lines
 
 # Editing:
 C   => delete to EOL + insert mode
@@ -20,5 +27,5 @@ zm => close all folds one level (more)
 zr => open all folds one level (reduce)
 
 Completion:
-CTRL-p        => complete word
-CTRL-x CTRL-l => complete whole line, e.g. for require statements
+ctrl-p        => complete word
+ctlr-x ctrl-l => complete whole line, e.g. for require statements
