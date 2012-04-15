@@ -13,6 +13,12 @@ set t_Co=256
 set background=dark
 colorscheme tuneafish
 
+" Make Ctrl+PgUp/PgDn work in tmux
+if &term == "screen-256color"
+  set t_kN=[6;*~
+  set t_kP=[5;*~
+endif
+
 " Set the window title (like xterm)
 set title
 
