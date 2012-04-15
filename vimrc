@@ -140,3 +140,6 @@ autocmd BufWinLeave * call clearmatches()
 
 " Map <leader>w to manually removing whitespace
 nnoremap <leader>w mz:%s/\s\+$//<cr>:let @/=''<cr>`z
+
+" Highlight VCS conflict marker
+match ErrorMsg '^\(<\|=\|>\)\{7\}\([^=].\+\)\?$'
