@@ -133,3 +133,15 @@ function TrimWhiteSpace()
 "au FileAppendPre * :call TrimWhiteSpace()
 "au FilterWritePre * :call TrimWhiteSpace()
 "au BufWritePre * :call TrimWhiteSpace()
+
+" Highlight trailing whitespace with a warning color.
+highlight TrailingWhitespace ctermbg=88
+" Match extra whitespace in all windows ...
+autocmd BufWinEnter * match TrailingWhitespace /\s\+$/
+" ... but not in insert mode
+autocmd InsertEnter * match TrailingWhitespace /\s\+\%#\@<!$/
+autocmd InsertLeave * match TrailingWhitespace /\s\+$/
+autocmd BufWinLeave * call clearmatches()
+
+" Map <leader>w to manually removing whitespace
+nnoremap <leader>w mz:%s/\s\+$//<cr>:let @/=''<cr>`z`
