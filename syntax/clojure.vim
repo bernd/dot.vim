@@ -45,7 +45,7 @@ if g:vimclojure#HighlightBuiltins != 0
 		\            . "*fn-loader* *1 *2 *3 *e",
 		\ "Define":    "def- defn defn- defmacro defmulti defmethod "
 		\            . "defstruct defonce declare definline definterface "
-		\            . "defprotocol defrecord deftype",
+		\            . "defprotocol defrecord deftype deftest",
 		\ "Macro":     "and or -> assert with-out-str with-in-str with-open "
 		\            . "locking destructure ns dosync binding delay "
 		\            . "lazy-cons lazy-cat time assert with-precision "
