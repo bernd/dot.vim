@@ -151,10 +151,12 @@ nnoremap <leader>w mz:%s/\s\+$//<cr>:let @/=''<cr>`z
 match ErrorMsg '^\(<\|=\|>\)\{7\}\([^=].\+\)\?$'
 
 " Custom smartinput rules.
-" Do not close a '[' if there is a ", ' or number after the cursor.
-call smartinput#define_rule({'at': '\%#\_["''0-9]', 'char': '[', 'input': '['})
-" Do not close a '{' if there is a ", ' or number after the cursor.
-call smartinput#define_rule({'at': '\%#\_["''0-9]', 'char': '{', 'input': '{'})
+" Do not close a '[' if there is a " or ' after the cursor.
+call smartinput#define_rule({'at': '\%#"', 'char': '[', 'input': '['})
+call smartinput#define_rule({'at': '\%#''', 'char': '[', 'input': '['})
+" Do not close a '{' if there is a " or ' after the cursor.
+call smartinput#define_rule({'at': '\%#"', 'char': '{', 'input': '{'})
+call smartinput#define_rule({'at': '\%#''', 'char': '{', 'input': '{'})
 
 " Align blocks on first '=' (from tenderlove)
 " Usage: ctrl-v + <leader>a
