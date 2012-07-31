@@ -371,7 +371,8 @@ function! vimclojure#ResultBuffer.Init() dict
 	setlocal buftype=nofile
 	setlocal bufhidden=wipe
 
-	call vimclojure#MapPlug("n", "p", "CloseResultBuffer")
+	" Changed from p to P to avoid conflict with crtlp plugin.
+	call vimclojure#MapPlug("n", "P", "CloseResultBuffer")
 
 	call self.clear()
 	let leader = exists("g:maplocalleader") ? g:maplocalleader : "\\"

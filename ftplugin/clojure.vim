@@ -142,6 +142,7 @@ if exists("b:vimclojure_namespace")
 	augroup END
 endif
 
-call vimclojure#MapPlug("n", "p", "CloseResultBuffer")
+" Changed from p to P to avoid conflict with crtlp plugin.
+call vimclojure#MapPlug("n", "P", "CloseResultBuffer")
 
 let &cpo = s:cpo_save
