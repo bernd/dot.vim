@@ -158,6 +158,16 @@ call smartinput#define_rule({'at': '\%#''', 'char': '[', 'input': '['})
 call smartinput#define_rule({'at': '\%#"', 'char': '{', 'input': '{'})
 call smartinput#define_rule({'at': '\%#''', 'char': '{', 'input': '{'})
 
+" fugitive related commands.
+" Open a split and execute git diff
+nnoremap <leader>d :50sp new<cr>:Git! diff<cr>
+
+" Open a split and execute git diff --cached
+nnoremap <leader>c :50sp new<cr>:Git! diff --cached<cr>
+
+" Exec Gstatus
+nnoremap <leader>s :Gstatus<cr>
+
 " Align blocks on first '=' (from tenderlove)
 " Usage: ctrl-v + <leader>a
 command! -nargs=? -range Align <line1>,<line2>call AlignSection('<args>')
