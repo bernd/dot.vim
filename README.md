@@ -3,6 +3,10 @@ dot.vim
 
 My personal vim configuration. No, I don't use pathogen yet.
 
+## Hints
+
+* `:map ,t :w\|:!ruby test_file.rb<cr>` Map ',t' to write file and exec with ruby.
+
 ## Color schemes
 
 Lots of color schemes can be found in the
