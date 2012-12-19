@@ -147,6 +147,9 @@ autocmd BufWinLeave * call clearmatches()
 " Map <leader>w to manually removing whitespace
 nnoremap <leader>w mz:%s/\s\+$//<cr>:let @/=''<cr>`z
 
+" Map <leader>n to toggle line numbering
+nnoremap <leader>n :set invnumber number?<CR>
+
 " Highlight VCS conflict marker
 match ErrorMsg '^\(<\|=\|>\)\{7\}\([^=].\+\)\?$'
 
