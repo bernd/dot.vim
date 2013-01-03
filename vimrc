@@ -83,6 +83,9 @@ au BufRead,BufNewFile *.rb set filetype=ruby.rspec
 au BufRead,BufNewFile *.sub set filetype=sh
 au BufRead,BufNewFile *.js set filetype=javascript.node
 
+" Restore cursor position
+au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
+
 au FileType python set ts=4 sw=4 tw=100 sts=4 expandtab list
 au FileType ruby set ts=2 sw=2 tw=100 sts=2 expandtab list
 au FileType javascript set ts=2 sw=2 tw=100 sts=2 expandtab list
