@@ -11,7 +11,7 @@ set timeoutlen=250
 " Color and color schemes
 set t_Co=256
 set background=dark
-colorscheme tuneafish
+colorscheme solarized
 
 " Make Ctrl+PgUp/PgDn work in tmux
 if &term == "screen-256color"
@@ -44,7 +44,8 @@ set backspace=indent,eol,start
 " This only works since vim 7.3
 if version >= 703
   set colorcolumn=81
-  hi ColorColumn ctermbg=235
+  "hi ColorColumn ctermbg=235
+  hi ColorColumn ctermbg=0
 
   " Encryption
   set cryptmethod=blowfish
