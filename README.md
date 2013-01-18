@@ -6,6 +6,9 @@ My personal vim configuration. No, I don't use pathogen yet.
 ## Hints
 
 * `:map ,t :w\|:!ruby test_file.rb<cr>` Map ',t' to write file and exec with ruby.
+* `:Move` Rename buffer and file on disk
+* `:SudoWrite` Write a privileged file with `sudo`
+* `:W` Write every open window
 
 ## Color schemes
 
