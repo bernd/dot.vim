@@ -6,7 +6,7 @@ set directory=~/.vim/tmp
 set viminfo='100,f1
 
 " How long key sequences can take to complete
-set timeoutlen=250
+set timeoutlen=750
 
 " Color and color schemes
 set t_Co=256
