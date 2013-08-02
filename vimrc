@@ -37,8 +37,8 @@ set laststatus=2
 " Airline plugin
 let g:airline_theme='ubaryd'
 let g:airline_powerline_fonts=0
-let g:airline_left_sep = '»'
-let g:airline_right_sep = '«'
+let g:airline_left_sep = ''
+let g:airline_right_sep = ''
 let g:airline_linecolumn_prefix = '¶ '
 let g:airline_branch_prefix = '⎇  '
 let g:airline_paste_symbol = 'PASTE'
