@@ -155,6 +155,9 @@ autocmd BufWinLeave * call clearmatches()
 " Map <leader>w to manually removing whitespace
 nnoremap <leader>w mz:%s/\s\+$//<cr>:let @/=''<cr>`z
 
+" Map <leader>h to convert to new ruby hash syntax
+nnoremap <leader>h :%s/:\([a-zA-Z0-9_]\+\) =>/\1:/gc<cr>
+
 " Map <leader>n to toggle line numbering
 nnoremap <leader>n :set invnumber number?<cr>:GitGutterToggle<cr>
 " Avoid flickering on redraw but will always show the sign column.
