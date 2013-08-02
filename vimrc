@@ -34,10 +34,14 @@ set wildmenu
 set wildmode=list:longest
 set laststatus=2
 
-" Powerline plugin
-let g:Powerline_symbols = 'unicode'
-" Remove mode indicator
-call Pl#Theme#RemoveSegment('mode_indicator')
+" Airline plugin
+let g:airline_theme='ubaryd'
+let g:airline_powerline_fonts=0
+let g:airline_left_sep = '»'
+let g:airline_right_sep = '«'
+let g:airline_linecolumn_prefix = '¶ '
+let g:airline_fugitive_prefix = '⎇  '
+let g:airline_paste_symbol = 'PASTE'
 
 set backspace=indent,eol,start
 
