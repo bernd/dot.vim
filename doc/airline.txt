@@ -1,5 +1,10 @@
 *airline.txt*  Lean and mean statusline that's light as air
-
+                   _                       _      _ _                        ~
+            __   _(_)_ __ ___         __ _(_)_ __| (_)_ __   ___             ~
+            \ \ / / | '_ ` _ \ _____ / _` | | '__| | | '_ \ / _ \            ~
+             \ V /| | | | | | |_____| (_| | | |  | | | | | |  __/            ~
+              \_/ |_|_| |_| |_|      \__,_|_|_|  |_|_|_| |_|\___|            ~
+                                                                             ~
 ==============================================================================
 INTRODUCTION                                                       *airline*
 
@@ -16,8 +21,7 @@ FEATURES                                                  *airline-features*
 *  optimized for speed; it loads in under a millisecond.
 *  fully customizable; if you know a little |statusline| syntax you can
    tweak it to your needs.
-*  trivial to write colorschemes; for a minimal theme you need to edit
-   9 lines of colors. (please send pull requests)
+*  extremely easy to write themes.
 
 ==============================================================================
 NAME                                                          *airline-name*
@@ -33,99 +37,91 @@ CONFIGURATION                                        *airline-configuration*
 There are a couple configuration values available (shown with their default
 values):
 
-* the separator used on the left side
->
+* the separator used on the left side >
   let g:airline_left_sep='>'
 <
-
-* the separator used on the right side
->
+* the separator used on the right side >
   let g:airline_right_sep='<'
 <
-
-* enable/disable fugitive/lawrencium integration
->
-  let g:airline_enable_branch=1
-<
-
-* enable/disable syntastic integration
->
-  let g:airline_enable_syntastic=1
-<
-
-* enable/disable tagbar integration
->
-  let g:airline_enable_tagbar=1
-<
-
-* enable modified detection
->
+* enable modified detection >
   let g:airline_detect_modified=1
-<
 
-* enable paste detection
->
+* enable paste detection >
   let g:airline_detect_paste=1
 <
-
-* enable iminsert detection
->
+* enable iminsert detection >
   let g:airline_detect_iminsert=1
 <
-
-* enable whitespace detection
->
-  let g:airline_detect_whitespace=0 "disabled
-  let g:airline_detect_whitespace=1 "icon and message (default)
-  let g:airline_detect_whitespace=2 "icon only
+* determine whether inactive windows should have the left section collapsed to
+  only the filename of that buffer.  >
+  let g:airline_inactive_collapse=1
 <
-
-* change the default theme
->
-  let g:airline_theme='dark'
+* themes are automatically selected based on the matching colorscheme. this
+  can be overridden by defining a value. >
+  let g:airline_theme=
 <
-
-* enable/disable usage of patched powerline font symbols
->
+* if you want to patch the airline theme before it gets applied, you can
+  supply the name of a function where you can modify the palette. >
+  let g:airline_theme_patch_func = 'AirlineThemePatch'
+  function! AirlineThemePatch(palette)
+    if g:airline_theme == 'badwolf'
+      for colors in values(a:palette.inactive)
+        let colors[3] = 245
+      endfor
+    endif
+  endfunction
+<
+* enable/disable usage of patched powerline font symbols >
   let g:airline_powerline_fonts=0
 <
+* define the set of text to display for each mode.  >
+  let g:airline_mode_map = {} " see source for the defaults
 
-* define the set of text to display for each mode.
->
-  let g:airline_mode_map = {} " see source for current list
+  " or copy paste the following into your vimrc for shortform text
+  let g:airline_mode_map = {
+      \ '__' : '-',
+      \ 'n'  : 'N',
+      \ 'i'  : 'I',
+      \ 'R'  : 'R',
+      \ 'c'  : 'C',
+      \ 'v'  : 'V',
+      \ 'V'  : 'V',
+      \ '' : 'V',
+      \ 's'  : 'S',
+      \ 'S'  : 'S',
+      \ '' : 'S',
+      \ }
 <
-
 * define the set of filename match queries which excludes a window from having
-  its statusline modified
->
+  its statusline modified >
   let g:airline_exclude_filenames = [] " see source for current list
 <
-
 * define the set of filetypes which are excluded from having its window
-  statusline modified
->
+  statusline modified >
   let g:airline_exclude_filetypes = [] " see source for current list
 <
-
 * defines whether the preview window should be excluded from have its window
   statusline modified (may help with plugins which use the preview window
-  heavily)
->
+  heavily) >
   let g:airline_exclude_preview = 0
 <
-
 ==============================================================================
 COMMANDS                                                  *airline-commands*
 
 :AirlineTheme {theme-name}                                   *:AirlineTheme*
   Displays or changes the current theme.
 
+:AirlineToggleWhitespace                          *:AirlineToggleWhitespace*
+  Toggles whitespace detection.
+
+:AirlineToggle                                              *:AirlineToggle*
+  Toggles between the standard `statusline`
+
 ==============================================================================
 CUSTOMIZATION                                        *airline-customization*
 
 The following are some unicode symbols for customizing the left/right
 separators, as well as the powerline font glyths.
-
 >
   " unicode symbols
   let g:airline_left_sep = '»'
@@ -135,19 +131,19 @@ separators, as well as the powerline font glyths.
   let g:airline_linecolumn_prefix = '␊ '
   let g:airline_linecolumn_prefix = '␤ '
   let g:airline_linecolumn_prefix = '¶ '
-  let g:airline_branch_prefix = '⎇ '
-  let g:airline_paste_symbol = 'ρ'
-  let g:airline_paste_symbol = 'Þ'
-  let g:airline_paste_symbol = '∥'
-  let g:airline_whitespace_symbol = 'Ξ'
+  let g:airline#extensions#branch#symbol = '⎇ '
+  let g:airline#extensions#paste#symbol = 'ρ'
+  let g:airline#extensions#paste#symbol = 'Þ'
+  let g:airline#extensions#paste#symbol = '∥'
+  let g:airline#extensions#whitespace#symbol = 'Ξ'
 
   " powerline symbols
   let g:airline_left_sep = ''
   let g:airline_left_alt_sep = ''
   let g:airline_right_sep = ''
   let g:airline_right_alt_sep = ''
-  let g:airline_branch_prefix = ' '
-  let g:airline_readonly_symbol = ''
+  let g:airline#extensions#branch#symbol = ' '
+  let g:airline#extensions#readonly#symbol = ''
   let g:airline_linecolumn_prefix = ' '
 
   " old vim-powerline symbols
@@ -155,20 +151,22 @@ separators, as well as the powerline font glyths.
   let g:airline_left_alt_sep = '⮁'
   let g:airline_right_sep = '⮂'
   let g:airline_right_alt_sep = '⮃'
-  let g:airline_branch_prefix = '⭠'
-  let g:airline_readonly_symbol = '⭤'
+  let g:airline#extensions#branch#symbol = '⭠'
+  let g:airline#extensions#readonly#symbol = '⭤'
   let g:airline_linecolumn_prefix = '⭡'
 <
 
 For more intricate customizations, you can replace the predefined sections
-with the usual statusline syntax.
-
+with the usual statusline syntax. Note that many of these settings can also be
+controlled with |airline-configuration| variables, which is useful for
+sections which by default host more than one extension.
 >
-  " here are the the default values
+  variable names                default contents
+  ----------------------------------------------------------------------------
   let g:airline_section_a       (the mode/paste indicator)
   let g:airline_section_b       (the fugitive/lawrencium branch indicator)
   let g:airline_section_c       (bufferline or filename)
-  let g:airline_section_gutter
+  let g:airline_section_gutter  (readonly, csv)
   let g:airline_section_x       (tagbar, filetype)
   let g:airline_section_y       (fileencoding, fileformat)
   let g:airline_section_z       (percentage, line number, column number)
@@ -178,6 +176,77 @@ with the usual statusline syntax.
   " the current working directory, followed by the filename.
   let g:airline_section_b = '%{getcwd()}'
   let g:airline_section_c = '%t'
+<
+==============================================================================
+EXTENSIONS                                              *airline-extensions*
+
+                                                            *airline-branch*
+fugitive.vim <https://github.com/tpope/vim-fugitive>
+lawrencium   <https://bitbucket.org/ludovicchabant/vim-lawrencium>
+
+* enable/disable fugitive/lawrencium integration >
+  let g:airline#extensions#branch#enabled = 1
+<
+* change the text for when no branch is detected >
+  let g:airline#extensions#branch#empty_message = ''
+<
+                                                         *airline-syntastic*
+syntastic <https://github.com/scrooloose/syntastic>
+
+* enable/disable syntastic integration >
+  let g:airline#extensions#syntastic#enabled = 1
+<
+                                                            *airline-tagbar*
+tagbar <https://github.com/majutsushi/>
+
+* enable/disable tagbar integration >
+  let g:airline#extensions#tagbar#enabled = 1
+<
+                                                               *airline-csv*
+csv.vim <https://github.com/chrisbra/csv.vim>
+
+* enable/disable csv integration for displaying the current column. >
+  let g:airline#extensions#csv#enabled = 1
+<
+* change how columns are displayed. >
+  let g:airline#extensions#csv#column_display = 'Number' (default)
+  let g:airline#extensions#csv#column_display = 'Name'
+<
+                                                             *airline-hunks*
+vim-gitgutter <https://github.com/airblade/vim-gitgutter>
+vim-signify <https://github.com/mhinz/vim-signify>
+
+* enable/disable showing a summary of changed hunks under source control.
+  let g:airline#extensions#hunks#enabled = 1
+<
+* enable/disable showing only non-zero hunks. >
+  let g:airline#extensions#hunks#non_zero_only = 0
+<
+* set hunk count symbols. >
+  let g:airline#extensions#hunks#hunk_symbols = ['+', '~', '-']
+<
+                                                        *airline-whitespace*
+* enable/disable detection of whitespace errors. >
+  let g:airline#extensions#whitespace#enabled = 1
+<
+* customize the whitespace symbol. >
+  let g:airline#extensions#whitespace#symbol = '!'
+<
+* configure which whitespace checks to enable. >
+  let g:airline#extensions#whitespace#checks = [ 'indent', 'trailing' ]
+<
+* configure whether a message should be displayed. >
+  let g:airline#extensions#whitespace#show_message = 1
+<
+                                                             *airline-ctrlp*
+ctrlp <https://github.com/kien/ctrlp.vim>
+
+* configure which mode colors should ctrlp window use (takes effect
+  only if the active airline theme doesn't define ctrlp colors) >
+  let g:airline#extensions#ctrlp#color_template = 'insert' (default)
+  let g:airline#extensions#ctrlp#color_template = 'normal'
+  let g:airline#extensions#ctrlp#color_template = 'visual'
+  let g:airline#extensions#ctrlp#color_template = 'replace'
 <
 
 ==============================================================================
@@ -191,7 +260,7 @@ The g:airline_statusline_funcrefs variable is an array of funcrefs that get
 invoked before the statusline gets overwritten for each window.  The following
 is an example of how you can extend vim-airline to support a new plugin.
 >
-  function! MyPlugin()
+  function! MyPlugin(...)
     if &filetype == 'MyPluginFileType'
       let w:airline_section_a = 'MyPlugin'
       let w:airline_section_b = '%f'
@@ -201,16 +270,65 @@ is an example of how you can extend vim-airline to support a new plugin.
   endfunction
   call add(g:airline_statusline_funcrefs, function('MyPlugin'))
 <
-                                                *g:airline_exclude_funcrefs*
-The g:airline_exclude_funcrefs variable is an array that's returns 1 or 0 to
-determine whether that particular window should be excluded from having its
-statusline modified.  Here is an example:
+==============================================================================
+PIPELINE                                                  *airline-pipeline*
+
+Sometimes you want to do more than just use overrides.  The statusline funcref
+is invoked and passed a bunch of arguments.  The first of these arguments is
+the statusline builder.  You can use this to build completely custom
+statuslines to your liking.  Additionally, the return value of this function
+controls determines what airline will do next.  Here is an example:
 >
-  function! ExcludeFoo()
-    return &filetype == 'FooType'
+  function! MyPlugin(...)
+    " first variable is the statusline builder
+    let builder = a:1
+
+    " build and set the statusline
+    " WARNING: the API for the builder is not finalized and may change
+    call builder.add_section('Normal', '%f')
+    call builder.add_section('WarningMsg', '%{getcwd()}')
+    call setwinvar(winnr(), '&statusline', builder.build())
+
+    " the default action: modify the statusline with the default rules
+    " (this would render the above code redundant)
+    return  0
+
+    " do not modify the statusline, useful for excluding filetypes or when you
+    " have overridden the statusline yourself.
+    return -1
   endfunction
-  call add(g:airline_exclude_funcrefs, function('ExcludeFoo'))
 <
+
+==============================================================================
+WRITING EXTENSIONS                              *airline-writing-extensions*
+
+The basic idea is that the statusline is rendered with a series of overrides.
+For each section that the algorithm encounters, it will first check to see if
+there is a window-local variable of the section.  If it exists, the value will
+be used, otherwise, the global variable of the section will be used.  This
+means it is possible to override only one or two sections of the statusline.
+See |g:airline_statusline_funcrefs| for an example of a simple extension.
+
+For contributions into the plugin, here are the following guidelines:
+
+1.  For simple |&filetype| checks, they can be added directly into the
+`extensions.vim` file.
+
+2.  Pretty much everything else should live as a separate file under the
+`extensions/` directory.
+
+  a.  Inside `extensions.vim`, add a check for some variable or command that
+      is always available (these must be defined in `plugin`, and _not_
+      `autoload` of the other plugin).  If it exists, then initialize the
+      extension. This ensures that the extension is loaded if and only if the
+      user has the other plugin installed.  Also, a check to
+      `airline#extensions#foo_plugin#enabled` should be performed to allow the
+      user to disable it.
+
+  b.  Configuration variables for the extension should reside in the
+      extension, e.g. `g:airline#extensions#foo_plugin#bar_variable`.
+
+See the source of |example.vim| for a working extension.
 
 ==============================================================================
 WRITING THEMES                                              *airline-themes*
@@ -227,7 +345,35 @@ highlight groups.
 ==============================================================================
 TROUBLESHOOTING                                    *airline-troubleshooting*
 
-Solutions to common problems can be found FAQ section in the Wiki:
+Q. There are no colors.
+A. You need to set up your terminal correctly.  For more details, see
+   <http://vim.wikia.com/wiki/256_colors_in_vim>.  Alternatively, if you want
+   to bypass the automatic detection of terminal colors, you can force Vim
+   into 256 color mode with this: >
+  set t_Co=256
+<
+Q. The statusline does not appear until I create a split.
+A. This is the default setting of |laststatus|.  If you want it to appear all
+   the time, add the following to your vimrc: >
+  set laststatus=2
+<
+Q. Powerline symbols are not showing up.
+A. First, you must install patched powerline fonts. Second, you must enable
+   unicode in vim.  >
+  set encoding=utf-8
+<
+Q. There is a pause when leaving insert mode.
+A. Add the following to your vimrc.  >
+  set ttimeoutlen=50
+<
+Q. The colors look a little off for some themes.
+A. Certain themes are derived from the active colorscheme by extracting colors
+   from predefined highlight groups.  These airline themes will look good for
+   their intended matching colorschemes, but will be hit or miss when loaded
+   with other colorschemes.
+
+
+Solutions to other common problems can be found in the Wiki:
 <https://github.com/bling/vim-airline/wiki/FAQ>
 
 ==============================================================================
@@ -238,7 +384,7 @@ Contributions and pull requests are welcome.
 ==============================================================================
 LICENSE                                                    *airline-license*
 
-MIT license.  Copyright © 2013 Bailey Ling.
+MIT License.  Copyright © 2013 Bailey Ling.
 
 
  vim:tw=78:ts=8:ft=help:norl:
