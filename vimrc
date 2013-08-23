@@ -162,6 +162,7 @@ nnoremap <leader>h :%s/:\([a-zA-Z0-9_]\+\) =>/\1:/gc<cr>
 nnoremap <leader>n :set invnumber number?<cr>:GitGutterToggle<cr>
 " Avoid flickering on redraw but will always show the sign column.
 "let g:gitgutter_sign_column_always = 1
+let g:gitgutter_eager = 0
 
 " Highlight VCS conflict marker
 match ErrorMsg '^\(<\|=\|>\)\{7\}\([^=].\+\)\?$'
