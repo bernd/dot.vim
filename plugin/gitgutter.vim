@@ -5,18 +5,32 @@ let g:loaded_gitgutter = 1
 
 " Initialisation {{{
 
-if !exists('g:gitgutter_enabled')
-  let g:gitgutter_enabled = 1
-endif
+function! s:set(var, default)
+  if !exists(a:var)
+    if type(a:default)
+      exe 'let' a:var '=' string(a:default)
+    else
+      exe 'let' a:var '=' a:default
+    endif
+  endif
+endfunction
 
-if !exists('g:gitgutter_highlight_lines')
-  let g:gitgutter_highlight_lines = 0
-endif
+call s:set('g:gitgutter_enabled',               1)
+call s:set('g:gitgutter_signs',                 1)
+call s:set('g:gitgutter_highlight_lines',       0)
 let s:highlight_lines = g:gitgutter_highlight_lines
+call s:set('g:gitgutter_sign_column_always',    0)
+call s:set('g:gitgutter_realtime',              1)
+call s:set('g:gitgutter_eager',                 1)
+call s:set('g:gitgutter_sign_added',            '+')
+call s:set('g:gitgutter_sign_modified',         '~')
+call s:set('g:gitgutter_sign_removed',          '_')
+call s:set('g:gitgutter_sign_modified_removed', '~_')
+call s:set('g:gitgutter_diff_args',             '')
+call s:set('g:gitgutter_escape_grep',           0)
 
-if !exists('g:gitgutter_sign_column_always')
-  let g:gitgutter_sign_column_always = 0
-endif
+let s:file = ''
+let s:hunk_summary = [0, 0, 0]
 
 function! s:init()
   if !exists('g:gitgutter_initialised')
@@ -35,6 +49,9 @@ function! s:init()
     let s:other_signs = []
     let s:dummy_sign_id = 153
 
+    let s:grep_available = executable('grep')
+    let s:grep_command = ' | ' . (g:gitgutter_escape_grep ? '\grep' : 'grep') . ' -e "^@@ "'
+
     let g:gitgutter_initialised = 1
   endif
 endfunction
@@ -44,19 +61,39 @@ endfunction
 " Utility {{{
 
 function! s:is_active()
-  return g:gitgutter_enabled && s:exists_current_file() && s:is_in_a_git_repo() && s:is_tracked_by_git()
+  return g:gitgutter_enabled && s:exists_file() && s:is_in_a_git_repo() && s:is_tracked_by_git()
 endfunction
 
 function! s:current_file()
-  return expand("%:p")
+  return expand('%:p')
 endfunction
 
-function! s:exists_current_file()
-  return strlen(s:current_file()) > 0
+function! s:set_file(file)
+  let s:file = a:file
 endfunction
 
-function! s:directory_of_current_file()
-  return shellescape(expand("%:p:h"))
+function! s:file()
+  return s:file
+endfunction
+
+function! s:exists_file()
+  return filereadable(s:file())
+endfunction
+
+function! s:directory_of_file()
+  return shellescape(fnamemodify(s:file(), ':h'))
+endfunction
+
+" https://github.com/tpope/vim-dispatch/blob/9cdd05a87f8a47120335be03dfcd8358544221cd/autoload/dispatch/windows.vim#L8-L17
+function! s:escape(str)
+  if &shellxquote ==# '"'
+    return '"' . substitute(a:str, '"', '""', 'g') . '"'
+  else
+    let esc = exists('+shellxescape') ? &shellxescape : '"&|<>()@^'
+    return &shellquote .
+          \ substitute(a:str, '['.esc.']', '&', 'g') .
+          \ get({'(': ')', '"(': ')"'}, &shellquote, &shellquote)
+  endif
 endfunction
 
 function! s:discard_stdout_and_stderr()
@@ -70,20 +107,25 @@ function! s:discard_stdout_and_stderr()
   return s:discard
 endfunction
 
-function! s:command_in_directory_of_current_file(cmd)
-  return 'cd ' . s:directory_of_current_file() . ' && ' . a:cmd
+function! s:command_in_directory_of_file(cmd)
+  let s:cmd_in_dir = 'pushd ' . s:directory_of_file() . ' && ' . a:cmd
+  return substitute(s:cmd_in_dir, "'", '"', 'g')
 endfunction
 
 function! s:is_in_a_git_repo()
-  let cmd = 'git rev-parse' . s:discard_stdout_and_stderr()
-  call system(s:command_in_directory_of_current_file(cmd))
+  let cmd = s:escape('git rev-parse' . s:discard_stdout_and_stderr())
+  call system(s:command_in_directory_of_file(cmd))
   return !v:shell_error
 endfunction
 
 function! s:is_tracked_by_git()
-  let cmd = 'git ls-files --error-unmatch' . s:discard_stdout_and_stderr() . ' ' . shellescape(s:current_file())
-  call system(s:command_in_directory_of_current_file(cmd))
+  let cmd = s:escape('git ls-files --error-unmatch' . s:discard_stdout_and_stderr() . ' ' . shellescape(s:file()))
+  call system(s:command_in_directory_of_file(cmd))
   return !v:shell_error
+endfunction
+
+function! s:differences(hunks)
+  return len(a:hunks) != 0
 endfunction
 
 function! s:snake_case_to_camel_case(text)
@@ -124,16 +166,18 @@ function! s:define_signs()
   sign define GitGutterLineModifiedRemoved
   sign define GitGutterDummy
 
-  call s:define_sign_symbols()
-  call s:define_sign_text_highlights()
+  if g:gitgutter_signs
+    call s:define_sign_symbols()
+    call s:define_sign_text_highlights()
+  endif
   call s:define_sign_line_highlights()
 endfunction
 
 function! s:define_sign_symbols()
-  sign define GitGutterLineAdded           text=+
-  sign define GitGutterLineModified        text=~
-  sign define GitGutterLineRemoved         text=_
-  sign define GitGutterLineModifiedRemoved text=~_
+  exe "sign define GitGutterLineAdded           text=" . g:gitgutter_sign_added
+  exe "sign define GitGutterLineModified        text=" . g:gitgutter_sign_modified
+  exe "sign define GitGutterLineRemoved         text=" . g:gitgutter_sign_removed
+  exe "sign define GitGutterLineModifiedRemoved text=" . g:gitgutter_sign_modified_removed
 endfunction
 
 function! s:define_sign_text_highlights()
@@ -142,7 +186,6 @@ function! s:define_sign_text_highlights()
   sign define GitGutterLineRemoved         texthl=GitGutterDelete
   sign define GitGutterLineModifiedRemoved texthl=GitGutterChangeDelete
 endfunction
-
 
 function! s:define_sign_line_highlights()
   if s:highlight_lines
@@ -163,10 +206,23 @@ endfunction
 
 " Diff processing {{{
 
-function! s:run_diff()
-  let cmd = 'git diff --no-ext-diff --no-color -U0 ' . shellescape(s:current_file()) .
-        \ ' | grep -e "^@@ "'
-  let diff = system(s:command_in_directory_of_current_file(cmd))
+function! s:run_diff(realtime)
+  if a:realtime
+    let blob_name = ':./' . fnamemodify(s:file(),':t')
+    let cmd = 'diff -U0 ' . g:gitgutter_diff_args . ' <(git show '. blob_name .') - '
+  else
+    let cmd = 'git diff --no-ext-diff --no-color -U0 ' . g:gitgutter_diff_args . ' ' . shellescape(s:file())
+  endif
+  if s:grep_available
+    let cmd .= s:grep_command
+  endif
+  let cmd = s:escape(cmd)
+  if a:realtime
+    let buffer_contents = join(getline(1, '$'), "\n") . "\n"
+    let diff = system(s:command_in_directory_of_file(cmd), buffer_contents)
+  else
+    let diff = system(s:command_in_directory_of_file(cmd))
+  endif
   return diff
 endfunction
 
@@ -187,6 +243,7 @@ function! s:parse_diff(diff)
 endfunction
 
 function! s:process_hunks(hunks)
+  let s:hunk_summary = [0, 0, 0]
   let modified_lines = []
   for hunk in a:hunks
     call extend(modified_lines, s:process_hunk(hunk))
@@ -203,18 +260,25 @@ function! s:process_hunk(hunk)
 
   if s:is_added(from_count, to_count)
     call s:process_added(modifications, from_count, to_count, to_line)
+    let s:hunk_summary[0] += to_count
 
   elseif s:is_removed(from_count, to_count)
     call s:process_removed(modifications, from_count, to_count, to_line)
+    let s:hunk_summary[2] += from_count
 
   elseif s:is_modified(from_count, to_count)
     call s:process_modified(modifications, from_count, to_count, to_line)
+    let s:hunk_summary[1] += to_count
 
   elseif s:is_modified_and_added(from_count, to_count)
     call s:process_modified_and_added(modifications, from_count, to_count, to_line)
+    let s:hunk_summary[0] += to_count - from_count
+    let s:hunk_summary[1] += from_count
 
   elseif s:is_modified_and_removed(from_count, to_count)
     call s:process_modified_and_removed(modifications, from_count, to_count, to_line)
+    let s:hunk_summary[1] += to_count
+    let s:hunk_summary[2] += from_count - to_count
 
   endif
   return modifications
@@ -297,13 +361,13 @@ endfunction
 function! s:clear_signs(file_name)
   if exists('s:sign_ids') && has_key(s:sign_ids, a:file_name)
     for id in s:sign_ids[a:file_name]
-      exe ":sign unplace " . id . " file=" . a:file_name
+      exe ":sign unplace" id "file=" . a:file_name
     endfor
     let s:sign_ids[a:file_name] = []
   endif
 endfunction
 
-" This assumes there are no GitGutter signs in the current file.
+" This assumes there are no GitGutter signs in the file.
 " If this is untenable we could change the regexp to exclude GitGutter's
 " signs.
 function! s:find_other_signs(file_name)
@@ -331,7 +395,7 @@ endfunction
 function! s:add_sign(line_number, name, file_name)
   let id = s:next_sign_id()
   if !s:is_other_sign(a:line_number)  " Don't clobber other people's signs.
-    exe ":sign place " . id . " line=" . a:line_number . " name=" . a:name . " file=" . a:file_name
+    exe ":sign place" id "line=" . a:line_number "name=" . a:name "file=" . a:file_name
     call s:remember_sign(id, a:file_name)
   endif
 endfunction
@@ -344,12 +408,12 @@ endfunction
 
 function! s:remember_sign(id, file_name)
   if has_key(s:sign_ids, a:file_name)
-    let sign_ids_for_current_file = s:sign_ids[a:file_name]
-    call add(sign_ids_for_current_file, a:id)
+    let sign_ids_for_file = s:sign_ids[a:file_name]
+    call add(sign_ids_for_file, a:id)
   else
-    let sign_ids_for_current_file = [a:id]
+    let sign_ids_for_file = [a:id]
   endif
-  let s:sign_ids[a:file_name] = sign_ids_for_current_file
+  let s:sign_ids[a:file_name] = sign_ids_for_file
 endfunction
 
 function! s:is_other_sign(line_number)
@@ -358,39 +422,64 @@ endfunction
 
 function! s:add_dummy_sign()
   let last_line = line('$')
-  exe ":sign place " . s:dummy_sign_id . " line=" . (last_line + 1) . " name=GitGutterDummy file=" . s:current_file()
+  exe ":sign place" s:dummy_sign_id "line=" . (last_line + 1) "name=GitGutterDummy file=" . s:file()
+endfunction
+
+function! s:remove_dummy_sign()
+  if exists('s:dummy_sign_id')
+    exe ":sign unplace" s:dummy_sign_id "file=" . s:file()
+  endif
 endfunction
 
 " }}}
 
 " Public interface {{{
 
-function! GitGutter()
+function! GitGutterAll()
+  for buffer_id in tabpagebuflist() 
+    call GitGutter(expand('#' . buffer_id . ':p'))
+  endfor
+endfunction
+command GitGutterAll call GitGutterAll()
+
+" Supply optional argument to use realtime mode.
+function! GitGutter(file, ...)
+  call s:set_file(a:file)
   if s:is_active()
     call s:init()
-    let diff = s:run_diff()
+    if a:0 == 1
+      let diff = s:run_diff(1)
+    else
+      let diff = s:run_diff(0)
+    endif
     let s:hunks = s:parse_diff(diff)
     let modified_lines = s:process_hunks(s:hunks)
-    let file_name = s:current_file()
     if g:gitgutter_sign_column_always
       call s:add_dummy_sign()
+    else
+      if s:differences(s:hunks)
+        call s:add_dummy_sign()  " prevent flicker
+      else
+        call s:remove_dummy_sign()
+      endif
     endif
-    call s:clear_signs(file_name)
-    call s:find_other_signs(file_name)
-    call s:show_signs(file_name, modified_lines)
+    call s:clear_signs(a:file)
+    call s:find_other_signs(a:file)
+    call s:show_signs(a:file, modified_lines)
   endif
 endfunction
-command GitGutter call GitGutter()
+command GitGutter call GitGutter(s:current_file())
 
 function! GitGutterDisable()
   let g:gitgutter_enabled = 0
-  call s:clear_signs(s:current_file())
+  call s:clear_signs(s:file())
+  call s:remove_dummy_sign()
 endfunction
 command GitGutterDisable call GitGutterDisable()
 
 function! GitGutterEnable()
   let g:gitgutter_enabled = 1
-  call GitGutter()
+  call GitGutter(s:current_file())
 endfunction
 command GitGutterEnable call GitGutterEnable()
 
@@ -429,7 +518,7 @@ function! GitGutterNextHunk(count)
       if hunk[2] > current_line
         let hunk_count += 1
         if hunk_count == a:count
-          execute 'normal! ' . hunk[2] . 'G'
+          execute 'normal!' hunk[2] . 'G'
           break
         endif
       endif
@@ -446,7 +535,7 @@ function! GitGutterPrevHunk(count)
       if hunk[2] < current_line
         let hunk_count += 1
         if hunk_count == a:count
-          execute 'normal! ' . hunk[2] . 'G'
+          execute 'normal!' hunk[2] . 'G'
           break
         endif
       endif
@@ -455,7 +544,7 @@ function! GitGutterPrevHunk(count)
 endfunction
 command -count=1 GitGutterPrevHunk call GitGutterPrevHunk(<count>)
 
-" Returns the git-diff hunks for the current file or an empty list if there
+" Returns the git-diff hunks for the file or an empty list if there
 " aren't any hunks.
 "
 " The return value is a list of lists.  There is one inner list per hunk.
@@ -476,12 +565,38 @@ function! GitGutterGetHunks()
   return s:is_active() ? s:hunks : []
 endfunction
 
+" Returns an array that contains a summary of the current hunk status.
+" The format is [ added, modified, removed ], where each value represents
+" the number of lines added/modified/removed respectively.
+function! GitGutterGetHunkSummary()
+  return s:hunk_summary
+endfunction
+
+nnoremap <silent> <Plug>GitGutterNextHunk :<C-U>execute v:count1 . "GitGutterNextHunk"<CR>
+nnoremap <silent> <Plug>GitGutterPrevHunk :<C-U>execute v:count1 . "GitGutterPrevHunk"<CR>
+
+if !hasmapto('<Plug>GitGutterNextHunk') && maparg(']h', 'n') ==# ''
+  nmap ]h <Plug>GitGutterNextHunk
+  nmap [h <Plug>GitGutterPrevHunk
+endif
+
 augroup gitgutter
   autocmd!
-  autocmd BufReadPost,BufWritePost,FileReadPost,FileWritePost * call GitGutter()
-  if !has('gui_win32')
-    autocmd FocusGained * call GitGutter()
+
+  if g:gitgutter_realtime
+    autocmd CursorHold,CursorHoldI * call GitGutter(s:current_file(), 1)
   endif
+
+  if g:gitgutter_eager
+    autocmd BufEnter,BufWritePost,FileWritePost,FileChangedShellPost * call GitGutter(s:current_file())
+    autocmd TabEnter * call GitGutterAll()
+    if !has('gui_win32')
+      autocmd FocusGained * call GitGutterAll()
+    endif
+  else
+    autocmd BufReadPost,BufWritePost,FileReadPost,FileWritePost,FileChangedShellPost * call GitGutter(s:current_file())
+  endif
+  autocmd ColorScheme * call s:define_sign_column_highlight() | call s:define_highlights()
 augroup END
 
 " }}}
