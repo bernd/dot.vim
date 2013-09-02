@@ -1,12 +1,15 @@
 " MIT License. Copyright (c) 2013 Bailey Ling.
 " vim: et ts=2 sts=2 sw=2
 
-function! airline#extensions#syntastic#apply(...)
-  let w:airline_section_warning = get(w:, 'airline_section_warning', '')
-  let w:airline_section_warning = ' %{SyntasticStatuslineFlag()}'
+function! airline#extensions#syntastic#get_warnings()
+  let errors = SyntasticStatuslineFlag()
+  if strlen(errors) > 0
+    return errors.' '
+  endif
+  return ''
 endfunction
 
 function! airline#extensions#syntastic#init(ext)
-  call a:ext.add_statusline_funcref(function('airline#extensions#syntastic#apply'))
+  call airline#parts#define_function('syntastic', 'airline#extensions#syntastic#get_warnings')
 endfunction
 

@@ -80,17 +80,21 @@ let g:airline#themes#dark#palette.visual_modified = {
       \ }
 
 
-let s:IA = [ '#4e4e4e' , '#1c1c1c' , 239 , 234 , '' ]
-let g:airline#themes#dark#palette.inactive = airline#themes#generate_color_map(s:IA, s:IA, s:IA, s:file)
+let s:IA1 = [ '#4e4e4e' , '#1c1c1c' , 239 , 234 , '' ]
+let s:IA2 = [ '#4e4e4e' , '#262626' , 239 , 235 , '' ]
+let s:IA3 = [ '#4e4e4e' , '#303030' , 239 , 236 , '' ]
+let g:airline#themes#dark#palette.inactive = airline#themes#generate_color_map(s:IA1, s:IA2, s:IA3, s:file)
 
 
 " Here we define the color map for ctrlp.  We check for the g:loaded_ctrlp
 " variable so that related functionality is loaded iff the user is using
 " ctrlp. Note that this is optional, and if you do not define ctrlp colors
 " they will be chosen automatically from the existing palette.
-if get(g:, 'loaded_ctrlp', 0)
-  let g:airline#themes#dark#palette.ctrlp = airline#extensions#ctrlp#generate_color_map(
-        \ [ '#d7d7ff' , '#5f00af' , 189 , 55  , ''     ],
-        \ [ '#ffffff' , '#875fd7' , 231 , 98  , ''     ],
-        \ [ '#5f00af' , '#ffffff' , 55  , 231 , 'bold' ])
+if !get(g:, 'loaded_ctrlp', 0)
+  finish
 endif
+let g:airline#themes#dark#palette.ctrlp = airline#extensions#ctrlp#generate_color_map(
+      \ [ '#d7d7ff' , '#5f00af' , 189 , 55  , ''     ],
+      \ [ '#ffffff' , '#875fd7' , 231 , 98  , ''     ],
+      \ [ '#5f00af' , '#ffffff' , 55  , 231 , 'bold' ])
+

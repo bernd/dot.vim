@@ -46,6 +46,6 @@ function! airline#extensions#hunks#get_hunks()
 endfunction
 
 function! airline#extensions#hunks#init(ext)
-  let g:airline_section_b .= '%{airline#extensions#hunks#get_hunks()}'
+  call airline#parts#define_function('hunks', 'airline#extensions#hunks#get_hunks')
 endfunction
 

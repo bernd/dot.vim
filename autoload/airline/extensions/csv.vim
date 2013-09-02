@@ -16,17 +16,12 @@ endfunction
 
 function! airline#extensions#csv#apply(...)
   if &ft ==# "csv"
-    if !exists('w:airline_section_gutter')
-      let w:airline_section_gutter = '%='
-    endif
-    let w:airline_section_gutter =
-          \ g:airline_left_alt_sep
-          \ .' %{airline#extensions#csv#get_column()}'
-          \ .w:airline_section_gutter
+    call airline#extensions#prepend_to_section('gutter',
+          \ g:airline_left_alt_sep.' %{airline#extensions#csv#get_column()}')
   endif
 endfunction
 
 function! airline#extensions#csv#init(ext)
-  call a:ext.add_statusline_funcref(function('airline#extensions#csv#apply'))
+  call a:ext.add_statusline_func('airline#extensions#csv#apply')
 endfunction
 
