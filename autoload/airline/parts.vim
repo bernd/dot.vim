@@ -26,6 +26,14 @@ function! airline#parts#define_minwidth(key, width)
   call airline#parts#define(a:key, { 'minwidth': a:width })
 endfunction
 
+function! airline#parts#define_condition(key, predicate)
+  call airline#parts#define(a:key, { 'condition': a:predicate })
+endfunction
+
+function! airline#parts#define_accent(key, accent)
+  call airline#parts#define(a:key, { 'accent': a:accent })
+endfunction
+
 function! airline#parts#define_empty(keys)
   for key in a:keys
     call airline#parts#define_raw(key, '')
@@ -59,5 +67,9 @@ endfunction
 
 function! airline#parts#filetype()
   return &filetype
+endfunction
+
+function! airline#parts#ffenc()
+  return printf('%s%s', &fenc, strlen(&ff) > 0 ? '['.&ff.']' : '')
 endfunction
 
