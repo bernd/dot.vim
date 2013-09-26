@@ -43,9 +43,7 @@ function! airline#switch_theme(name)
   let w:airline_lastmode = ''
   call airline#update_statusline()
   call airline#load_theme()
-
-  " this is required to prevent clobbering the startup info message, i don't know why...
-  call airline#check_mode(winnr())
+  call airline#check_mode()
 endfunction
 
 function! airline#switch_matching_theme()
@@ -69,7 +67,7 @@ endfunction
 function! airline#update_statusline()
   for nr in filter(range(1, winnr('$')), 'v:val != winnr()')
     call setwinvar(nr, 'airline_active', 0)
-    let context = { 'winnr': nr, 'active': 0, 'bufnr': winbufnr(nr) }
+    let context = { 'winnr': nr, 'active': 0 }
     call s:invoke_funcrefs(context, s:inactive_funcrefs)
   endfor
 
@@ -80,11 +78,10 @@ function! airline#update_statusline()
   endfor
 
   let w:airline_active = 1
-  let context = { 'winnr': winnr(), 'active': 1, 'bufnr': winbufnr(winnr()) }
+  let context = { 'winnr': winnr(), 'active': 1 }
   call s:invoke_funcrefs(context, g:airline_statusline_funcrefs)
 endfunction
 
-let s:contexts = {}
 let s:core_funcrefs = [
       \ function('airline#extensions#apply'),
       \ function('airline#extensions#default#apply') ]
@@ -92,19 +89,11 @@ function! s:invoke_funcrefs(context, funcrefs)
   let builder = airline#builder#new(a:context)
   let err = airline#util#exec_funcrefs(a:funcrefs + s:core_funcrefs, builder, a:context)
   if err == 1
-    let a:context.line = builder.build()
-    let s:contexts[a:context.winnr] = a:context
-    call setwinvar(a:context.winnr, '&statusline', '%!airline#statusline('.a:context.winnr.')')
+    call setwinvar(a:context.winnr, '&statusline', builder.build())
   endif
 endfunction
 
-function! airline#statusline(winnr)
-  return '%{airline#check_mode('.a:winnr.')}'.s:contexts[a:winnr].line
-endfunction
-
-function! airline#check_mode(winnr)
-  let context = s:contexts[a:winnr]
-
+function! airline#check_mode()
   if get(w:, 'airline_active', 1)
     let l:m = mode()
     if l:m ==# "i"
@@ -122,23 +111,18 @@ function! airline#check_mode(winnr)
     let w:airline_current_mode = get(g:airline_mode_map, '__')
   endif
 
-  if g:airline_detect_modified
-    if &modified
-      call add(l:mode, 'modified')
-    endif
+  if g:airline_detect_modified && &modified
+    call add(l:mode, 'modified')
   endif
-
   if g:airline_detect_paste && &paste
     call add(l:mode, 'paste')
   endif
 
   let mode_string = join(l:mode)
   if get(w:, 'airline_lastmode', '') != mode_string
-    call airline#highlighter#highlight_modified_inactive(context.bufnr)
     call airline#highlighter#highlight(l:mode)
     let w:airline_lastmode = mode_string
   endif
-
   return ''
 endfunction
 

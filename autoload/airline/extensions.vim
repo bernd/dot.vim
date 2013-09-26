@@ -2,8 +2,6 @@
 " vim: et ts=2 sts=2 sw=2
 
 let s:ext = {}
-let s:ext._theme_funcrefs = []
-
 function! s:ext.add_statusline_func(name) dict
   call airline#add_statusline_func(a:name)
 endfunction
@@ -13,11 +11,8 @@ endfunction
 function! s:ext.add_inactive_statusline_func(name) dict
   call airline#add_inactive_statusline_func(a:name)
 endfunction
-function! s:ext.add_theme_func(name) dict
-  call add(self._theme_funcrefs, function(a:name))
-endfunction
 
-let s:script_path = tolower(resolve(expand('<sfile>:p:h')))
+let s:script_path = resolve(expand('<sfile>:p:h'))
 
 let s:filetype_overrides = {
       \ 'netrw': [ 'netrw', '%f' ],
@@ -50,22 +45,22 @@ endfunction
 function! airline#extensions#apply_left_override(section1, section2)
   let w:airline_section_a = a:section1
   let w:airline_section_b = a:section2
-  let w:airline_section_c = airline#section#create(['readonly'])
+  let w:airline_section_c = ''
   let w:airline_render_left = 1
   let w:airline_render_right = 0
 endfunction
 
 let s:active_winnr = -1
 function! airline#extensions#apply(...)
-  let s:active_winnr = winnr()
-
   if s:is_excluded_window()
     return -1
   endif
 
+  let s:active_winnr = winnr()
+
   if &buftype == 'quickfix'
     let w:airline_section_a = '%q'
-    let w:airline_section_b = '%{get(w:, "quickfix_title", "")}'
+    let w:airline_section_b = ''
     let w:airline_section_c = ''
     let w:airline_section_x = ''
   elseif &buftype == 'help'
@@ -114,7 +109,9 @@ function! s:is_excluded_window()
 endfunction
 
 function! airline#extensions#load_theme()
-  call airline#util#exec_funcrefs(s:ext._theme_funcrefs, g:airline#themes#{g:airline_theme}#palette)
+  if get(g:, 'loaded_ctrlp', 0)
+    call airline#extensions#ctrlp#load_theme()
+  endif
 endfunction
 
 function! s:sync_active_winnr()
@@ -168,7 +165,7 @@ function! airline#extensions#load()
   endif
 
   if (get(g:, 'airline#extensions#branch#enabled', 1) && get(g:, 'airline_enable_branch', 1))
-        \ && (exists('*fugitive#head') || exists('*lawrencium#statusline'))
+        \ && (get(g:, 'loaded_fugitive', 0) || get(g:, 'loaded_lawrencium', 0))
     call airline#extensions#branch#init(s:ext)
   endif
 
@@ -181,33 +178,25 @@ function! airline#extensions#load()
     call airline#extensions#virtualenv#init(s:ext)
   endif
 
-  if (get(g:, 'airline#extensions#syntastic#enabled', 1) && get(g:, 'airline_enable_syntastic', 1))
-        \ && exists(':SyntasticCheck')
-    call airline#extensions#syntastic#init(s:ext)
-  endif
-
   if (get(g:, 'airline#extensions#whitespace#enabled', 1) && get(g:, 'airline_detect_whitespace', 1))
     call airline#extensions#whitespace#init(s:ext)
   endif
-
-  if get(g:, 'airline#extensions#tabline#enabled', 0)
-    call airline#extensions#tabline#init(s:ext)
+  if (get(g:, 'airline#extensions#syntastic#enabled', 1) && get(g:, 'airline_enable_syntastic', 1))
+        \ && exists(':SyntasticCheck')
+    call airline#extensions#syntastic#init(s:ext)
   endif
 
   " load all other extensions not part of the default distribution
   for file in split(globpath(&rtp, "autoload/airline/extensions/*.vim"), "\n")
     " we have to check both resolved and unresolved paths, since it's possible
     " that they might not get resolved properly (see #187)
-    if stridx(tolower(resolve(fnamemodify(file, ':p'))), s:script_path) < 0
-          \ && stridx(tolower(fnamemodify(file, ':p')), s:script_path) < 0
+    if stridx(resolve(fnamemodify(file, ':p')), s:script_path) < 0
+          \ && stridx(fnamemodify(file, ':p'), s:script_path) < 0
       let name = fnamemodify(file, ':t:r')
       if !get(g:, 'airline#extensions#'.name.'#enabled', 1)
         continue
       endif
-      try
-        call airline#extensions#{name}#init(s:ext)
-      catch
-      endtry
+      call airline#extensions#{name}#init(s:ext)
     endif
   endfor
 endfunction

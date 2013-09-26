@@ -22,9 +22,7 @@ function! airline#deprecation#check()
         \ ]
   for test in tests
     if exists(test[0])
-      let max = winwidth(0) - 16
-      let msg = printf('The variable %s is deprecated and may not work in the future. It has been replaced with %s. Please read the documentation.', test[0], test[1])
-      echom msg[:max].'...'
+      echom printf('The variable %s is deprecated and may not work in the future. It has been replaced with %s', test[0], test[1])
     endif
   endfor
 endfunction

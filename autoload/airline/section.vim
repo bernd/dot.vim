@@ -2,20 +2,16 @@
 " vim: et ts=2 sts=2 sw=2
 
 call airline#init#bootstrap()
-let s:spc = g:airline_symbols.space
-
-function! s:wrap_accent(part, value)
-  if exists('a:part.accent')
-    return '%#__accent_'.(a:part.accent).'#'.a:value.'%#__restore__#'
-  endif
-  return a:value
-endfunction
 
 function! s:create(parts, append)
   let _ = ''
   for idx in range(len(a:parts))
     let part = airline#parts#get(a:parts[idx])
+
     let val = ''
+    if exists('part.highlight')
+      let val .= '%#'.(part.highlight).'#'
+    endif
 
     if exists('part.function')
       let func = (part.function).'()'
@@ -23,16 +19,16 @@ function! s:create(parts, append)
       let func = '"'.(part.text).'"'
     else
       if a:append > 0 && idx != 0
-        let val .= s:spc.g:airline_left_alt_sep.s:spc
+        let val .= ' '.g:airline_left_alt_sep.' '
       endif
       if a:append < 0 && idx != 0
-        let val = s:spc.g:airline_right_alt_sep.s:spc.val
+        let val = ' '.g:airline_right_alt_sep.' '.val
       endif
       if exists('part.raw')
-        let _ .= s:wrap_accent(part, val.(part.raw))
+        let _ .= val.(part.raw)
         continue
       else
-        let _ .= s:wrap_accent(part, val.a:parts[idx])
+        let _ .= val.a:parts[idx]
         continue
       endif
     endif
@@ -40,19 +36,12 @@ function! s:create(parts, append)
     let minwidth = get(part, 'minwidth', 0)
 
     if a:append > 0 && idx != 0
-      let partval = printf('%%{airline#util#append(%s,%s)}', func, minwidth)
+      let val .= printf('%%{airline#util#append(%s,%s)}', func, minwidth)
     elseif a:append < 0 && idx != len(a:parts) - 1
-      let partval = printf('%%{airline#util#prepend(%s,%s)}', func, minwidth)
+      let val .= printf('%%{airline#util#prepend(%s,%s)}', func, minwidth)
     else
-      let partval = printf('%%{airline#util#wrap(%s,%s)}', func, minwidth)
+      let val .= printf('%%{airline#util#wrap(%s,%s)}', func, minwidth)
     endif
-
-    if exists('part.condition')
-      let partval = substitute(partval, '{', '{'.(part.condition).' ? ', '')
-      let partval = substitute(partval, '}', ' : ""}', '')
-    endif
-
-    let val .= s:wrap_accent(part, partval)
     let _ .= val
   endfor
   return _
