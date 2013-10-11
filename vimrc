@@ -155,6 +155,8 @@ autocmd BufWinLeave * call clearmatches()
 " Map <leader>w to manually removing whitespace
 nnoremap <leader>w mz:%s/\s\+$//<cr>:let @/=''<cr>`z
 
+nnoremap <leader>t :Eval (clojure.test/run-tests)<cr>
+
 " Map <leader>h to convert to new ruby hash syntax
 nnoremap <leader>h :%s/:\([a-zA-Z0-9_]\+\) =>/\1:/gc<cr>
 
