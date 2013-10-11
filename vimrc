@@ -160,6 +160,7 @@ nnoremap <leader>h :%s/:\([a-zA-Z0-9_]\+\) =>/\1:/gc<cr>
 
 " Map <leader>n to toggle line numbering
 nnoremap <leader>n :set invnumber number?<cr>:GitGutterToggle<cr>
+nnoremap <leader>m :next<cr>
 " Avoid flickering on redraw but will always show the sign column.
 "let g:gitgutter_sign_column_always = 1
 let g:gitgutter_eager = 0
