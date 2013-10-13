@@ -119,6 +119,9 @@ let g:airline_linecolumn_prefix = '¶ '
 let g:airline_branch_prefix = '⎇  '
 let g:airline_paste_symbol = 'PASTE'
 
+" Clojure plugin
+let g:clojure_align_multiline_strings = 1
+
 " Gitgutter plugin
 let g:gitgutter_eager = 0
 
