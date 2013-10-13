@@ -47,7 +47,7 @@ au BufRead,BufNewFile *.rb set filetype=ruby.rspec
 au FileType python set ts=4 sw=4 sts=4
 au FileType html,erb set nosmartindent
 au FileType markdown set formatoptions=tcroqn2 comments=n:>
-au FileType sh set ts=8 sw=8 sts=0 nolist noexpandtab
+au FileType sh,make set ts=8 sw=8 sts=0 nolist noexpandtab
 
 " Restore last cursor position in the file
 au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
