@@ -93,8 +93,6 @@ autocmd BufWinLeave * call clearmatches()
 
 " Ruby
 function! s:ruby_setup() abort
-  echomsg "Running s:ruby_setup"
-
   " Map <leader>h to convert to new ruby hash syntax
   nnoremap <leader>h :%s/:\([a-zA-Z0-9_]\+\) =>/\1:/gc<cr>
 endfunction
@@ -103,8 +101,6 @@ autocmd FileType ruby call s:ruby_setup()
 
 " Clojure
 function! s:clojure_setup() abort
-  echomsg "Running s:clojure_setup"
-
   nnoremap <leader>t :Eval (clojure.test/run-tests)<cr>
   nnoremap <leader>e :%Eval<cr>
 endfunction
