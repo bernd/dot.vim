@@ -1,4 +1,4 @@
 /bundle/
-/doc/tags
 /tmp/
 !/tmp/.keep
+tags
