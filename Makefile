@@ -1,7 +1,11 @@
 bundle:
 	@while read repo; do \
 		echo "==> $$repo"; \
-		(cd bundle && git clone $$repo); \
+		if [ -d "bundle/`basename $$repo`" ]; then \
+			(cd bundle && git pull); \
+		else \
+			(cd bundle && git clone $$repo); \
+		fi;\
 	done < plugins.txt
 
 help:
