@@ -1,3 +1,4 @@
+https://github.com/vim-scripts/comments.vim
 https://github.com/kien/ctrlp.vim
 https://github.com/vim-scripts/paredit.vim
 https://github.com/vim-scripts/renamer.vim
