@@ -1,4 +1,5 @@
 https://github.com/kien/ctrlp.vim
+https://github.com/vim-scripts/paredit.vim
 https://github.com/vim-scripts/renamer.vim
 https://github.com/msanders/snipmate.vim
 https://github.com/timcharper/textile.vim
