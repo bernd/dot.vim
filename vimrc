@@ -75,6 +75,9 @@ nnoremap <c-k> <c-w>k
 nnoremap <c-h> <c-w>h
 nnoremap <c-l> <c-w>l
 
+" Switch to regular tabbing.
+nnoremap !T :set ts=8 sw=8 sts=0 nolist noexpandtab<cr>
+
 
 " Highlight config
 
