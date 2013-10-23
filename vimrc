@@ -137,3 +137,7 @@ if exists('g:loaded_smartinput')
   call smartinput#define_rule({'at': '\%#"', 'char': '{', 'input': '{'})
   call smartinput#define_rule({'at': '\%#''', 'char': '{', 'input': '{'})
 endif
+
+" Ruby plugin
+" Set the global ruby path to avoid calling ruby when open a ruby file.
+let g:ruby_path = ".,,"
