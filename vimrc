@@ -78,6 +78,9 @@ nnoremap <c-l> <c-w>l
 " Switch to regular tabbing.
 nnoremap !T :set ts=8 sw=8 sts=0 nolist noexpandtab<cr>
 
+" Execute the selected in a shell
+vnoremap <leader>c <esc>:'<,'>:w !bash\|less<cr><cr>
+
 
 " Highlight config
 
