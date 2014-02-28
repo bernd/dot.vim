@@ -141,6 +141,9 @@ if exists('g:loaded_smartinput')
   call smartinput#define_rule({'at': '\%#''', 'char': '{', 'input': '{'})
 endif
 
+" Markdown plugin
+let g:markdown_fenced_languages=['ruby', 'erb=eruby', 'javascript', 'html', 'sh']
+
 " Ruby plugin
 " Set the global ruby path to avoid calling ruby when open a ruby file.
 let g:ruby_path = ".,,"
