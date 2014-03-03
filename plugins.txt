@@ -20,3 +20,5 @@ https://github.com/tpope/vim-markdown
 https://github.com/kana/vim-smartinput
 https://github.com/tpope/vim-surround
 https://github.com/postmodern/vim-yard
+https://github.com/vim-ruby/vim-ruby
+https://github.com/bogado/file-line
