@@ -21,3 +21,6 @@ https://github.com/tpope/vim-surround
 https://github.com/postmodern/vim-yard
 https://github.com/vim-ruby/vim-ruby
 https://github.com/bogado/file-line
+https://github.com/derekwyatt/vim-scala
+https://github.com/wting/rust.vim
+https://github.com/mxw/vim-jsx
