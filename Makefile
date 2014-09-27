@@ -1,4 +1,5 @@
 bundle:
+	@mkdir -p bundle
 	@while read repo; do \
 		echo "==> $$repo"; \
 		if [ -d "bundle/`basename $$repo`" ]; then \
