@@ -44,6 +44,7 @@ au BufRead,BufNewFile *.rb set filetype=ruby.rspec
 
 " Filetype settings
 au FileType python set ts=4 sw=4 sts=4
+au FileType lua set ts=4 sw=4 sts=4
 au FileType html,erb set nosmartindent
 au FileType sh,make,text,cfg,mail set ts=8 sw=8 sts=0 nolist noexpandtab
 au FileType gitcommit,snippet set ts=8 sw=8 sts=0 nolist noexpandtab
@@ -59,6 +60,9 @@ let mapleader=","
 
 " Toggle paste mode.
 nnoremap <leader>p :set invpaste paste?<cr>
+
+" Enable spell checking
+nnoremap <leader>s :setlocal spell spelllang=en_us<cr>
 
 " Remove all ^M/\r occurances
 nnoremap <leader>M <esc>:%s,\r,,g<cr>
@@ -147,3 +151,5 @@ let g:markdown_fenced_languages=['ruby', 'erb=eruby', 'javascript', 'html', 'sh'
 " Ruby plugin
 " Set the global ruby path to avoid calling ruby when open a ruby file.
 let g:ruby_path = ".,,"
+
+"let g:solarized_termcolors=256
