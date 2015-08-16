@@ -24,3 +24,7 @@ https://github.com/bogado/file-line
 https://github.com/derekwyatt/vim-scala
 https://github.com/wting/rust.vim
 https://github.com/mxw/vim-jsx
+https://github.com/dagwieers/asciidoc-vim
+https://github.com/leafgarland/typescript-vim
+https://github.com/GEverding/vim-hocon
+https://github.com/cespare/vim-toml
