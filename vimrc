@@ -52,6 +52,10 @@ au FileType gitcommit,snippet set ts=8 sw=8 sts=0 nolist noexpandtab
 " Restore last cursor position in the file
 au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
 
+au BufNewFile *.adoc setlocal filetype=asciidoc
+au BufRead *.adoc setlocal filetype=asciidoc
+au BufReadPost *.adoc setlocal filetype=asciidoc
+
 
 " Set leader key
 let mapleader=","
