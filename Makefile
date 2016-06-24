@@ -1,6 +1,10 @@
 bundle:
 	@mkdir -p bundle
 	@while read repo; do \
+		if echo $$repo | grep -q '^#'; then \
+			echo "==> Skipping disabled $$repo"; \
+			continue; \
+		fi; \
 		echo "==> $$repo"; \
 		if [ -d "bundle/`basename $$repo`" ]; then \
 			(cd bundle && git pull); \
