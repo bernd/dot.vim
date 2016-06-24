@@ -5,7 +5,7 @@ filetype plugin indent on
 
 "colorscheme solarized
 "set background=dark " options: light, dark
-colorscheme py-darcula
+colorscheme darcula
 
 set directory=~/.vim/tmp
 set backspace=indent,eol,start

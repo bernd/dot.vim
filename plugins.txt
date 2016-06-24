@@ -29,4 +29,5 @@ https://github.com/dagwieers/asciidoc-vim
 https://github.com/leafgarland/typescript-vim
 https://github.com/GEverding/vim-hocon
 https://github.com/cespare/vim-toml
-https://github.com/cohlin/vim-colorschemes
+#https://github.com/cohlin/vim-colorschemes
+https://github.com/blueshirts/darcula
