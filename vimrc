@@ -3,8 +3,9 @@ execute pathogen#infect('bundle/{}', 'manual/{}')
 syntax on
 filetype plugin indent on
 
-colorscheme solarized
-set background=dark " options: light, dark
+"colorscheme solarized
+"set background=dark " options: light, dark
+colorscheme py-darcula
 
 set directory=~/.vim/tmp
 set backspace=indent,eol,start
