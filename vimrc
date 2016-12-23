@@ -57,6 +57,10 @@ au BufNewFile *.adoc setlocal filetype=asciidoc
 au BufRead *.adoc setlocal filetype=asciidoc
 au BufReadPost *.adoc setlocal filetype=asciidoc
 
+au BufNewFile Deskfile setlocal filetype=sh
+au BufRead Deskfile setlocal filetype=sh
+au BufReadPost Deskfile setlocal filetype=sh
+
 
 " Set leader key
 let mapleader=","
