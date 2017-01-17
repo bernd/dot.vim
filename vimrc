@@ -7,6 +7,7 @@ filetype plugin indent on
 "set background=dark " options: light, dark
 colorscheme darcula
 
+set nocompatible
 set directory=~/.vim/tmp
 set backspace=indent,eol,start
 set title
