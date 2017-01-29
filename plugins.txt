@@ -26,3 +26,4 @@ https://github.com/tpope/vim-surround
 https://github.com/cespare/vim-toml
 https://github.com/postmodern/vim-yard
 https://github.com/Matt-Deacalion/vim-systemd-syntax
+https://github.com/joshglendenning/vim-caddyfile
